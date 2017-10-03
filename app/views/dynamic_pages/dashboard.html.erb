@@ -131,6 +131,36 @@
   </div>
 <% end %>
 
+<% content_for :wind_turbine_speed do %>
+  <div class="row weather-days">
+    <div class="col-sm-4">
+      <div class="daily-weather">
+        <h2 style="font-size: 32px;"><i class="wi wi-cloudy-gusts centered-ico"></i></h2>
+        <h3 style="text-align: center;"></h3>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="daily-weather">
+        <h2 style="text-align: center;"><b>Speed</b><br><small id="gauge-actual-speed" style="text-align: center;">[]</small></h2>
+      </div>
+    </div>
+  </div>
+    <canvas id="gaugespeed"></canvas>
+  <div class="goal-wrapper">
+    <span class="gauge-value pull-left"></span>
+    <span id="gauge-text-speed" class="gauge-value pull-left"></span>
+    <span id="goal-text-speed" class="goal-value pull-right" style="float: left;"></span>
+    </br>
+    <span style="font-weight: bold;text-align: center;display: block;">rpm</span>
+  </div>
+<% end %>
+
+<% content_for :speed do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="speedChart" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
 <% content_for :page_scripts do %>
 <!--Google Maps API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBemXPT9yR9ExhHqV3ZxpNdUbEjRuLctPo&libraries=places"></script>
@@ -220,6 +250,83 @@ function unitsTemperature(element){
   });
 </script>
 <!-- /Skycons -->
+
+<!-- /Wind Turbine -->
+<script>
+  $(document).ready(function() {
+    var speed_chart = function (data) {
+      time = data.timestamp;
+      y_data = data.y_data;
+      var lineData = {
+        labels: time,
+        datasets: [{
+          label: 'Speed',
+          backgroundColor: "rgba(3, 88, 106, 0.2)",
+          borderColor: "rgba(3, 88, 106, 0.80)",
+          pointBorderColor: "rgba(3, 88, 106, 0.80)",
+          pointBackgroundColor: "rgba(3, 88, 106, 0.80)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          lineTension: 0,
+          data: y_data
+        }]
+      };
+      var ctx = document.getElementById("speedChart").getContext('2d');
+      var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: lineData,
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: 'hour',
+                displayFormats: {
+                  hour: 'HH:mm'
+                },
+                unitStepSize: 4,
+                min: (moment().subtract(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00"),
+                max: (moment().add(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00")
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Time'
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Speed [rpm]'
+              }
+            }]
+          },
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy',
+            limits: {
+              max: 10,
+              min: 0.5
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
+    ajax_call("json", "rpm", '<%= speed_chart_path %>', speed_chart, false);
+  });
+</script>
+<!-- /Wind Turbine -->
 
 <!-- Responsive size of panels -->
 <script>
@@ -337,7 +444,7 @@ function unitsTemperature(element){
     ajax_call("json", "humidity_int", '<%= load_internal_path %>', load_internal, true);
     ajax_call("json", "last_update", '<%= load_internal_path %>', load_internal, false);
   }
-  
+
   function ShowPanel() {
     var load_panel = function (data) {
       variable = data.variable;
@@ -360,6 +467,27 @@ function unitsTemperature(element){
     }
     ajax_call("json", "url", '<%= load_stream_path %>', refresh_image, true );
   }
+
+  function ShowSpeed() {
+    var load_speed = function (data) {
+      variable = data.variable;
+      result = data.result;
+      timestamp = data.timestamp;
+      if (variable == "rpm") {
+        gaugespeed.maxValue = parseFloat(410);
+        gaugespeed.set(parseFloat(result));
+        document.getElementById("goal-text-speed").innerHTML = 410;
+        document.getElementById("gauge-text-speed").innerHTML = 0;
+      }else if (variable == "timestamp" ){
+        document.getElementById("subtitle_wind_turbine_speed").innerHTML = result;
+      } else {
+        document.getElementById(variable).innerHTML = result;
+        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+      }
+    }
+    ajax_call("json", "rpm", '<%= load_speed_path %>', load_speed, true);
+    ajax_call("json", "timestamp", '<%= load_speed_path %>', load_speed, false);
+  };
 
   $(document).ready(function() {
     var opts = {
@@ -396,7 +524,40 @@ function unitsTemperature(element){
     setInterval(function() {
         ShowStream();
     }, 400);
+
+    var optspeed = {
+        lines: 12,
+        angle: 0,
+        lineWidth: 0.4,
+        pointer: {
+            length: 0.75,
+            strokeWidth: 0.042,
+            color: '#1D212A'
+        },
+        percentColors : [
+          [ 0.0, "#7FC06D" ],
+          [ 0.50, "#F1D04D" ],
+          [ 1.0, "#D12727" ]
+      	],
+        limitMax: 'false',
+        colorStart: 'rgba(3, 20, 106, 0.20)',
+        colorStop: 'rgba(3, 88, 106, 0.80)',
+        strokeColor: '#F0F3F3',
+        generateGradient: true
+
+    };
+    var target = document.getElementById('gaugespeed');
+    gaugespeed = new Gauge(target).setOptions(optspeed);
+    document.getElementById("gaugespeed").removeAttribute("style");
+    gaugespeed.animationSpeed = 32;
+    gaugespeed.setTextField(document.getElementById("gauge-actual-speed"));
+    $('#gauge').css("width", "100%");
+    ShowSpeed();
+    setInterval(function() {
+      ShowSpeed();
+    }, 60000);
   });
+
 </script>
 <!--/AJAX Refresh -->
 <% end %>
