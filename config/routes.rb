@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   get '/temperature_chart', to: 'ajax_calls#temperature_chart', as: :temperature_chart
   get '/radiation_chart', to: 'ajax_calls#radiation_chart', as: :radiation_chart
   get '/vibration_chart', to: 'ajax_calls#vibration_chart', as: :vibration_chart
+  get '/speed_chart', to: 'ajax_calls#speed_chart', as: :speed_chart
+  get '/load_speed', to: 'ajax_calls#load_speed', as: :load_speed
   get '/temperature_historic', to: 'ajax_calls#temperature_historic', as: :temperature_historic
   get '/speed_historic', to: 'ajax_calls#speed_historic', as: :speed_historic
   get '/radiation_historic', to: 'ajax_calls#radiation_historic', as: :radiation_historic
