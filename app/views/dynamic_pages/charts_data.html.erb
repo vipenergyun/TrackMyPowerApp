@@ -37,6 +37,12 @@
   </div>
 <% end %>
 
+<% content_for :wind_turbine_vibration do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="vibrationChart" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
 
 <% content_for :page_scripts do %>
 <script>
@@ -364,6 +370,109 @@
       });
     }
 
+    var vibration_chart = function (data) {
+      time = data.timestamp;
+      x_data = data.x_data;
+      y_data = data.y_data;
+      z_data = data.z_data;
+      var ctx = document.getElementById("vibrationChart").getContext('2d');
+      var lineData = {
+        labels: time,
+        datasets: [{
+          label: 'X Axis',
+          backgroundColor: "transparent",
+          borderColor: "#ECBE14",
+          pointBorderColor: "#ECBE14",
+          pointBackgroundColor: "#ECBE14",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          linetension: 0,
+          data: x_data
+          },
+          {
+          label: 'Y Axis',
+          backgroundColor: "transparent",
+          borderColor: "#F28F3F",
+          pointBorderColor: "#F28F3F",
+          pointBackgroundColor: "#F28F3F",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          linetension: 0,
+          data: y_data
+          },
+          {
+          label: 'Z Axis',
+          backgroundColor: "transparent",
+          borderColor: "#981914",
+          pointBorderColor: "#981914",
+          pointBackgroundColor: "#981914",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          linetension: 0,
+          data: z_data          }]
+      };
+      var ctx = document.getElementById("vibrationChart").getContext('2d');
+      var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: lineData,
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: 'hour',
+                displayFormats: {
+                  hour: 'HH:mm'
+                },
+                unitStepSize: 4,
+                min: (moment().subtract(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00"),
+                max: (moment().add(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00")
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Time'
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Position [g]'
+              }
+            }]
+          },
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy',
+            limits: {
+              max: 10,
+              min: 0.5
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: true
+          }
+        }
+      });
+    }
+
+    ajax_call("json", "m_ejex", '<%= vibration_chart_path %>', vibration_chart, false);
+    ajax_call("json", "m_ejey", '<%= vibration_chart_path %>', vibration_chart, false);
+    ajax_call("json", "m_ejez", '<%= vibration_chart_path %>', vibration_chart, false);
     ajax_call("json", "voltage_med1", '<%= voltage_chart_path %>', voltage_chart, false);
     ajax_call("json", "energy_med1", '<%= energy_chart_path %>', energy_chart, false);
     ajax_call("json", "wind_med1", '<%= wind_chart_path %>', wind_chart, false);
