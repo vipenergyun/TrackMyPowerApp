@@ -83,7 +83,12 @@ class AjaxCallsController < ApplicationController
     when "radiation"
       variable = "radiation_panel"
       timestamp = nil
-   
+   when "current_panel"
+      variable = "panel_current"
+      timestamp = nil
+    when "voltage_panel"
+      variable = "panel_voltage"
+      timestamp = nil
     when "created_at"
       @result = PanelConditionMeasurement.last[variable] if !PanelConditionMeasurement.last.nil?
       timestamp = @result.strftime("%F")
