@@ -66,6 +66,7 @@ class AjaxCallsController < ApplicationController
     end
     render json: { result: @result, variable: variable, timestamp: timestamp}, layout: true
   end
+
   def load_panel
     variable = params[:variable]
     units = params[:units]
@@ -179,7 +180,7 @@ class AjaxCallsController < ApplicationController
     render json: { timestamp: timestamp, y_data: y_data }, layout: true
   end
 
-   def radiation_chart
+  def radiation_chart
     hsps = []
     days = []
     6.downto(0).to_a.each do |n_day|
@@ -200,6 +201,16 @@ class AjaxCallsController < ApplicationController
     end
     days.pop and days.push("Today")
     render json: { values: hsps, labels: days }
+  end
+
+  def vibration_chart
+    @result = WindTurbineVibrationMeasurement.where('created_at >= ?', 1.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:m_ejex, :m_ejey, :m_ejez, :created_at)
+    timestamp =  @result.pluck(:created_at)
+    timestamp.collect! { |element| element.strftime("%F %T") }
+    x_data = @result.pluck(:m_ejex)
+    y_data = @result.pluck(:m_ejey)
+    z_data = @result.pluck(:m_ejez)
+    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
   end
 
   def temperature_historic
