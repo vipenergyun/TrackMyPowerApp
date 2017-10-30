@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171023204128) do
+ActiveRecord::Schema.define(version: 20171029214236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,11 +126,13 @@ ActiveRecord::Schema.define(version: 20171023204128) do
   end
 
   create_table "panel_condition_measurements", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.float    "temp_ext"
     t.float    "temp_panel"
     t.float    "radiation"
+    t.float    "voltage_panel"
+    t.float    "current_panel"
   end
 
   create_table "panels", force: :cascade do |t|

@@ -344,7 +344,7 @@ function unitsTemperature(element){
       result = data.result;
       timestamp = data.timestamp;
       document.getElementById(variable).innerHTML = result;
-      document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+      //document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
     }
     ajax_call("json", "temp_panel", '<%= load_panel_path %>', load_panel, true);
     ajax_call("json", "temp_ext", '<%= load_panel_path %>', load_panel, true);
