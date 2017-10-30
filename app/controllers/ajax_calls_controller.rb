@@ -213,6 +213,38 @@ class AjaxCallsController < ApplicationController
     render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
   end
 
+  def load_speed
+    variable = params[:variable]
+    units = params[:units]
+    variable = "created_at" if variable.downcase == "last_update"
+    @result = WindTurbineSpeedMeasurement.last[variable] if !WindTurbineSpeedMeasurement.last.nil?
+    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
+    @result = 'N/A' if @result.blank?
+    timestamp = "#{time_ago_in_words(WindTurbineSpeedMeasurement.last.created_at)} ago" if !WindTurbineSpeedMeasurement.last.nil?
+    if variable.downcase == "timestamp"
+      @result = "#{time_ago_in_words(WindTurbineSpeedMeasurement.last.created_at)} ago"
+    end
+    case variable
+    when "rpm"
+      variable = "rpm"
+      @result = WindTurbineSpeedMeasurement.last["rpm"]
+    when "created_at"
+      @result = WindTurbineSpeedMeasurement.last[variable] if !WindTurbineSpeedMeasurement.last.nil?
+      timestamp = @result.strftime("%F")
+      @result = @result.strftime("%T")
+      variable = "last_update"
+    end
+    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
+  end
+
+  def speed_chart
+    @result = WindTurbineSpeedMeasurement.where('created_at >= ?', 1.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:rpm, :created_at)
+    timestamp =  @result.pluck(:created_at)
+    timestamp.collect! { |element| element.strftime("%F %T") }
+    y_data = @result.pluck(:rpm)
+    render json: { timestamp: timestamp, y_data: y_data }, layout: true
+  end
+
   def temperature_historic
     date_start = params[:variable][:start_date]
     date_end = params[:variable][:end_date]
