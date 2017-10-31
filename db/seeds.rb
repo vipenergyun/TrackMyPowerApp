@@ -89,7 +89,7 @@ create_general_tiles(guest_dashboard)
 def create_general_rows(dashboard)
   rows_list = [
     [Page.find_by(title: "Dashboard", dashboard: dashboard), 2, 420, nil],
-    [Page.find_by(title: "Dashboard", dashboard: dashboard), 2, 340, nil],
+    [Page.find_by(title: "Dashboard", dashboard: dashboard), 2, 370, nil],
     [Page.find_by(title: "Dashboard", dashboard: dashboard), 3, 340, nil],
     [Page.find_by(title: "Data Charts", dashboard: dashboard), 1, 370, nil],
     [Page.find_by(title: "Data Charts", dashboard: dashboard), 1, 370, nil],
@@ -143,7 +143,7 @@ create_general_panels(default_dashboard)
 create_general_panels(guest_dashboard)
 
 panels_list_default = [
-    [Row.find_by(order: 2, page: Page.find_by(title:"Dashboard", dashboard: default_dashboard)), "Control Panel", nil, nil, 4, 2, nil, nil, nil ]
+    [Row.find_by(order: 3, page: Page.find_by(title:"Dashboard", dashboard: default_dashboard)), "Control Panel", nil, nil, 4, 2, nil, nil, nil ]
 ]
 
 panels_list_default.each do |row, title, subtitle, description, width, order, movable, minimizable, closable|
