@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171029214236) do
+ActiveRecord::Schema.define(version: 20171105185614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -201,6 +201,8 @@ ActiveRecord::Schema.define(version: 20171029214236) do
   create_table "wind_turbine_frequencies_measurements", force: :cascade do |t|
     t.float   "mag"
     t.integer "freq"
+    t.float   "mag_y"
+    t.float   "mag_z"
   end
 
   create_table "wind_turbine_speed_measurements", force: :cascade do |t|

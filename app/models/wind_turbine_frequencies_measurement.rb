@@ -3,6 +3,8 @@ class WindTurbineFrequenciesMeasurement < ApplicationRecord
 	protected
 	def default_values
 		self.mag ||= 0
+		self.mag_y ||= 0
+		self.mag_z ||= 0
 		self.freq ||= 0
 	end 
 end
