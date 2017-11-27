@@ -213,6 +213,15 @@ class AjaxCallsController < ApplicationController
     render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
   end
 
+  def vibration_freq_chart
+    @result = WindTurbineFrequenciesMeasurement.last(100)
+    x_data = @result.pluck(:mag)
+    y_data = @result.pluck(:mag_y)
+    z_data = @result.pluck(:mag_z)
+    ejey_data = @result.pluck(:freq)
+    render json: { x_data: x_data, y_data: y_data, z_data: z_data, ejey_data: ejey_data }, layout: true
+  end
+
   def load_speed
     variable = params[:variable]
     units = params[:units]
@@ -316,7 +325,7 @@ class AjaxCallsController < ApplicationController
     y_data = @result.pluck(:m_ejez)
     render json: { timestamp: timestamp, y_data: y_data }, layout: true
   end
- 
+
   def refresh_checkboxes_tables
     group = params[:variable]
     group_class = group.squish.downcase.tr(" ","_").classify.constantize
@@ -343,13 +352,13 @@ class AjaxCallsController < ApplicationController
     columns.each do |column|
       columns_hash.push({title: column.humanize.titleize, data: column})
     end
-    
+
 
     render json: { columns: columns_hash, dataSet: dataSet}
   end
 
 
- 
+
   def new_alert
     alert_params = params.require(:variable).permit(:type,:variable,:comparator,:value1,:value2,:email,:enabled)
     alert_params["type"] = alert_params["type"].squish.parameterize(separator: '_')
