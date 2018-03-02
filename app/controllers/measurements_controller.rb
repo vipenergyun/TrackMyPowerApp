@@ -179,7 +179,7 @@ class MeasurementsController < ApplicationController
     end
   end
 
-   private
+   #private
      #def authenticate
       # if request.content_type.to_s.downcase != ENV['http_key'].downcase
        #  authenticate_or_request_with_http_basic('Administration') do |username, password|
