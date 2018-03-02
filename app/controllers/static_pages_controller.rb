@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
   #Not using default layout (application.html.erb --> home.html.erb)
   layout 'landing', only: [:home]
 
-  before_action :set_cache_buster, :define_navbar, except:[:home]
+  before_action :set_cache_buster, :define_navbar, except:[:home, :node611, :panel]
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -71,5 +71,13 @@ class StaticPagesController < ApplicationController
   def projects
 
   end  
+
+  def node611
+    render :file => "#{Rails.root}/app/views/static_pages/node611", :layout => false
+  end
+
+  def panel
+    render :file => "#{Rails.root}/app/views/static_pages/panel", :layout => false
+  end
 
 end

@@ -36,4 +36,11 @@ class DynamicPagesController < ApplicationController
     @group = ActiveRecord::Base.connection.tables.sort_by(&:downcase)
     @electrical_variables = ElectricalMeasurement.column_names - ["id", "created_at","updated_at"]
   end
+
+  def nodes
+    @user = current_user
+    @var = params[:id]
+    render :file => "#{Rails.root}/app/views/dynamic_pages/nodes", :layout => false
+    @notifications = last_notifications
+  end
 end
