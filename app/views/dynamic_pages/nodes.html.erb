@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    	<meta charset="utf-8">
+    	<title>Nodes</title>
+    	<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map_dos {
+        height: 100%;
+        width: 100%;
+        border-radius: 48px 48px 48px 48px;
+        border: 3px solid #FFC229;
+        padding:1px;
+      }
+      #h2{
+      	color: #FFFFFF;
+        font-size: 25px;
+      }
+      #content_logos{
+  		height: 35px; 
+  		width: 70%;
+  		background: #2A3F54;
+  		border-radius:10px 10px 10px 10px;
+  		margin: 7px;
+  		padding-top: 5px;
+  		align-content: center;
+  		font: Helvetica;
+	  }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+      	margin-top: 3px;
+        height: 94%;
+        width: 99%;
+        background: #FFFFFF;
+        border: 3px;
+      }
+   		</style>
+  </head>
+  <body>
+     <center>
+        <div id="content_logos">
+          <div id="h2"><b>Uninorte Interconnected Power System (UNIPS)</b></div> 
+       </div>
+     </center>
+    	
+    	<div id="map_dos"></div>
+    	
+    	<script>
+      	function initMap() {
+      		var image_mpk = {
+            	url: '/marker_mpk.png',
+            	size: new google.maps.Size(90, 90),
+            	origin: new google.maps.Point(0, 0),
+            	anchor: new google.maps.Point(17, 34),
+            	scaledSize: new google.maps.Size(40, 40)
+        	}
+        	var image_lc = {
+            	url: '/marker_lc.png',
+            	size: new google.maps.Size(90, 90),
+            	origin: new google.maps.Point(0, 0),
+            	anchor: new google.maps.Point(17, 34),
+            	scaledSize: new google.maps.Size(40, 40)
+        	}
+        	var image_pn = {
+            	url: '/marker_pn.png',
+            	size: new google.maps.Size(90, 90),
+            	origin: new google.maps.Point(0, 0),
+            	anchor: new google.maps.Point(17, 34),
+            	scaledSize: new google.maps.Size(40, 40)
+        	}
+
+        	var styledMapType = new google.maps.StyledMapType(
+            [
+              {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
+              {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
+              {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
+              {
+                featureType: 'administrative',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#c9b2a6'}]
+              },
+              {
+                featureType: 'administrative.land_parcel',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#dcd2be'}]
+              },
+              {
+                featureType: 'administrative.land_parcel',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#ae9e90'}]
+              },
+              {
+                featureType: 'landscape.natural',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'poi',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#93817c'}]
+              },
+              {
+                featureType: 'poi.park',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#a5b076'}]
+              },
+              {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#447530'}]
+              },
+              {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{color: '#f5f1e6'}]
+              },
+              {
+                featureType: 'road.arterial',
+                elementType: 'geometry',
+                stylers: [{color: '#fdfcf8'}]
+              },
+              {
+                featureType: 'road.highway',
+                elementType: 'geometry',
+                stylers: [{color: '#f8c967'}]
+              },
+              {
+                featureType: 'road.highway',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#e9bc62'}]
+              },
+              {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry',
+                stylers: [{color: '#e98d58'}]
+              },
+              {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#db8555'}]
+              },
+              {
+                featureType: 'road.local',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#806b63'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#8f7d77'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'labels.text.stroke',
+                stylers: [{color: '#ebe3cd'}]
+              },
+              {
+                featureType: 'transit.station',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'water',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#b9d3c2'}]
+              },
+              {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#92998d'}]
+              }
+            ],
+            {name: 'Styled Map'});
+
+        	var map = new google.maps.Map(document.getElementById('map_dos'), {
+          		zoom: 18,
+          		center: {lat: 11.019117, lng: -74.849520},
+          		mapTypeId:'hybrid'
+        	});
+
+        	map.mapTypes.set('styled_map', styledMapType);
+        	map.setMapTypeId('styled_map');
+
+        	marker_mpk = new google.maps.Marker({
+          		map: map,
+          		draggable: false,
+          		animation: google.maps.Animation.DROP,
+          		position: {lat: 11.020191, lng: -74.851362},
+          		icon: image_mpk,
+          		title: 'Bloque K - Mapuka'
+        	})
+       		marker_mpk.addListener('click', toggleBounce_mpk);
+
+        	marker_lc = new google.maps.Marker({
+          		map: map,
+          		draggable: false,
+          		animation: google.maps.Animation.DROP,
+          		position: {lat: 11.019065, lng: -74.851205},
+          		icon: image_lc,
+          		title: 'Bloque C - LC5 '
+        	})
+        	marker_lc.addListener('click', toggleBounce_lc);
+
+        	marker_pn = new google.maps.Marker({
+          		map: map,
+          		draggable: false,
+          		animation: google.maps.Animation.DROP,
+          		position: {lat: 11.019900, lng: -74.846679},
+          		icon: image_pn,
+          		title: 'Bloque M'
+        	})
+        	marker_pn.addListener('click', toggleBounce_pn);
+      	}
+
+      	function toggleBounce_mpk() {
+        	if (marker_mpk.getAnimation() !== null) {
+          		marker_mpk.setAnimation(null);
+        	} else {
+          		marker_mpk.setAnimation(google.maps.Animation.BOUNCE);
+        	}
+        	window.location = "http://track-mypower.tk/users/"+'<%= @var %>'+"/dashboard";
+      	}
+
+      	function toggleBounce_lc() {
+        	if (marker_lc.getAnimation() !== null) {
+          		marker_lc.setAnimation(null);
+        	} else {
+          		marker_lc.setAnimation(google.maps.Animation.BOUNCE);
+        	}
+        	window.location = "http://track-mypower.tk/node611";
+      	}
+
+      	function toggleBounce_pn() {
+        	if (marker_pn.getAnimation() !== null) {
+          		marker_pn.setAnimation(null);
+        	} else {
+          		marker_pn.setAnimation(google.maps.Animation.BOUNCE);
+        	}
+        	window.location = "http://track-mypower.tk/panel";
+      	}
+    	</script>
+    	<script async defer
+    		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIE6g-O7a5eArhbQHGe0X-79xswh1M6hk&callback=initMap">
+    	</script>
+  </body>
+</html>
+
+<!-- / AIzaSyBIE6g-O7a5eArhbQHGe0X-79xswh1M6hk -->

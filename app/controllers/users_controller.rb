@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   #User's profile web page
   def show
     @user = User.friendly.where('lower(username) = ?', params[:id].downcase).first
-    redirect_to dashboard_url(@user)
+    redirect_to nodes_url(@user)
   end
 
   #User signup web page
