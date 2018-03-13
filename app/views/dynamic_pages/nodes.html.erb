@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <%= render 'layouts/main_head' %>
     	<meta charset="utf-8">
     	<title>Nodes</title>
     	<style>
@@ -229,7 +230,7 @@
         	} else {
           		marker_mpk.setAnimation(google.maps.Animation.BOUNCE);
         	}
-        	window.location = "http://localhost:3000/users/"+'<%= @var %>'+"/dashboard";
+        	window.location = "http://track-mypower.tk/users/"+'<%= @var %>'+"/dashboard";
       	}
 
       	function toggleBounce_lc() {
@@ -238,7 +239,7 @@
         	} else {
           		marker_lc.setAnimation(google.maps.Animation.BOUNCE);
         	}
-        	window.location = "http://localhost:3000/smart-grid";
+        	window.location = "http://track-mypower.tk/smart-grid";
       	}
 
       	function toggleBounce_pn() {
