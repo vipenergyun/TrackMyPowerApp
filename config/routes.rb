@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   delete   '/logout',  to: 'sessions#destroy'
   get      '/publications',  to: 'static_pages#publications'
   get      '/projects',   to: 'static_pages#projects'
-  get      '/node611',   to: 'static_pages#node611'
+  get      '/smart-grid',   to: 'static_pages#IEEE13'
   get      '/panel',   to: 'static_pages#panel'
   dynamic_pages =  ["dashboard", "charts_data", "export_tables", "alerts", "nodes"]
   dynamic_pages.each do |page|
