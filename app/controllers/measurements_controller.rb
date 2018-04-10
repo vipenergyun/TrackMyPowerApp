@@ -136,6 +136,50 @@ class MeasurementsController < ApplicationController
     end
   end
 
+  def new_shark_p_frequency
+    accepted = {}
+    accepted[:freqy] = params[:freqy]
+    accepted[:pfactor] = params[:pfactor]
+    @shak_p_frequency_measurement = SharkPFrequencyMeasurement.new(accepted)
+    attempt = @shak_p_frequency_measurement.save
+    if attempt
+      create_notifications(SharkPFrequencyMeasurement)
+      render html: "SharkPFrequencyMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_p_power
+    accepted = {}
+    accepted[:watt] = params[:watt]
+    accepted[:va] = params[:va]
+    accepted[:var] = params[:var]
+    @shak_p_power_measurement = SharkPPowerMeasurement.new(accepted)
+    attempt = @shak_p_power_measurement.save
+    if attempt
+      create_notifications(SharkPPowerMeasurement)
+      render html: "SharkPPowerMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_p_energy
+    accepted = {}
+    accepted[:watth] = params[:watth]
+    accepted[:vah] = params[:vah]
+    accepted[:varh] = params[:varh]
+    @shak_p_energy_measurement = SharkPEnergyMeasurement.new(accepted)
+    attempt = @shak_p_energy_measurement.save
+    if attempt
+      create_notifications(SharkPEnergyMeasurement)
+      render html: "SharkPEnergyMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
   def new_wunderground
     station_id = 'IATLNTIC4'
     w_info = open("http://api.wunderground.com/api/606f3f6977348613/conditions/q/pws:#{station_id}.json")

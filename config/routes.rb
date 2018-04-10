@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   get '/stream/new', to:'measurements#new_stream'
   get '/measurements/panel_conditions/new', to:'measurements#new_panel_conditions'
 
+  #routes fot generating measurements for Panels Node.
+  get '/measurements/shark_p_frequency/new', to:'measurements#new_shark_p_frequency'
+  get '/measurements/shark_p_power/new', to:'measurements#new_shark_p_power'
+  get '/measurements/shark_p_energy/new', to:'measurements#new_shark_p_energy'
+
   #routes for AJAX Calls controller
   get '/load_electrical', to: 'ajax_calls#load_electrical', as: :load_electrical
   get '/load_metereological', to: 'ajax_calls#load_metereological', as: :load_metereological
