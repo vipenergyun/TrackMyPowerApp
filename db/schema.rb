@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180415074320) do
+ActiveRecord::Schema.define(version: 20180415155838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,11 +161,14 @@ ActiveRecord::Schema.define(version: 20180415074320) do
   end
 
   create_table "shark_panels_energy_measurements", force: :cascade do |t|
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.float    "energy_watt"
     t.float    "energy_va"
     t.float    "energy_var"
+    t.float    "energy_watt2"
+    t.float    "energy_va2"
+    t.float    "energy_var2"
   end
 
   create_table "shark_panels_frequency_measurements", force: :cascade do |t|

@@ -107,8 +107,42 @@ class AjaxCallsController < ApplicationController
     render json: { url: url, timestamp: timestamp }
   end
 
+  def load_energies
+    variable = params[:variable]
+    units = params[:units]
+    variable = "created_at" if variable.downcase == "last_update"
+    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
+    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
+    @result = 'N/A' if @result.blank?
+    timestamp = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago" if !WindTurbineSpeedMeasurement.last.nil?
+    if variable.downcase == "timestamp"
+      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
+    end
+    case variable
+    when "energy_watt"
+      variable = "energy_watt"
+      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
+    when "energy_va"
+      variable = "energy_va"
+      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
+    when "energy_var"
+      variable = "energy_var"
+      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
+    when "created_at"
+      @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
+      timestamp = @result.strftime("%F")
+      @result = @result.strftime("%T")
+      variable = "last_update"
+    end
+    if variable.downcase == "total_delivered_energy"
+      @result = SharkPanelsEnergyMeasurement.maximum("energy_watt")
+      timestamp = "Since April 2018"
+    end
+    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
+  end
+
   def power_chart
-    @result = SharkPanelsPowerMeasurement.where('created_at >= ?', 1.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt, :power_va, :power_var, :created_at)
+    @result = SharkPanelsPowerMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt, :power_va, :power_var, :created_at)
     timestamp =  @result.pluck(:created_at)
     timestamp.collect! { |element| element.strftime("%F %T") }
     x_data = @result.pluck(:power_watt)
@@ -230,36 +264,6 @@ class AjaxCallsController < ApplicationController
     z_data = @result.pluck(:mag_z)
     ejey_data = @result.pluck(:freq)
     render json: { x_data: x_data, y_data: y_data, z_data: z_data, ejey_data: ejey_data }, layout: true
-  end
-
-  def load_energies
-    variable = params[:variable]
-    units = params[:units]
-    variable = "created_at" if variable.downcase == "last_update"
-    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
-    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
-    @result = 'N/A' if @result.blank?
-    timestamp = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago" if !WindTurbineSpeedMeasurement.last.nil?
-    if variable.downcase == "timestamp"
-      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
-    end
-    case variable
-    when "energy_watt"
-      variable = "energy_watt"
-      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
-    when "energy_va"
-      variable = "energy_va"
-      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
-    when "energy_var"
-      variable = "energy_var"
-      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
-    when "created_at"
-      @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
-      timestamp = @result.strftime("%F")
-      @result = @result.strftime("%T")
-      variable = "last_update"
-    end
-    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
   end
 
   def load_speed

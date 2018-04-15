@@ -4,7 +4,7 @@
   <ul class="quick-list">
     <li><i class="fa fa-flash"></i>Energy [kWh]:</br><span id="gauge-actual-watt"></span></li>
   </ul>
-  <h2 style="text-align: center;"><b> Active Energy</b><br>
+  <!-- <h2 style="text-align: center;"><b> Active Energy</b><br> -->
   <div style="text-align: center;">
       <canvas width="190" height="120" align="center" id="gaugewatt"></canvas>
       <div class="goal-wrapper">
@@ -21,7 +21,7 @@
   <ul class="quick-list">
     <li><i class="fa fa-flash"></i>Energy [kVAh]:</br><span id="gauge-actual-va"></span></li>
   </ul>
-    <h2 style="text-align: center;"><b>Apparent Energy</b><br>
+    <!-- <h2 style="text-align: center;"><b>Apparent Energy</b><br> -->
     <div style="text-align: center;">
       <canvas width="190" height="120" align="center" id="gaugeva"></canvas>
       <div class="goal-wrapper">
@@ -39,7 +39,7 @@
     
     <li><i class="fa fa-flash"></i>Energy[kVARh]:</br><span id="gauge-actual-var"></span></li>
   </ul>
-    <h2 style="text-align: center;"><b>Reactive Energy</b><br>
+    <!-- <h2 style="text-align: center;"><b>Reactive Energy</b><br> -->
     <div style="text-align: center;">
       <canvas width="190" height="120" align="center" id="gaugevar"></canvas>
       <div class="goal-wrapper">
@@ -250,7 +250,7 @@ $(document).ready(function() {
         labels: time,
         datasets: [{
           label: 'Active [kW]',
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(236,190,20,0.40)",
           borderColor: "#ECBE14",
           pointBorderColor: "#ECBE14",
           pointBackgroundColor: "#ECBE14",
@@ -264,7 +264,7 @@ $(document).ready(function() {
           },
           {
           label: 'Apparent [kVA]',
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(242,143,63,0.40)",
           borderColor: "#F28F3F",
           pointBorderColor: "#F28F3F",
           pointBackgroundColor: "#F28F3F",
@@ -278,7 +278,7 @@ $(document).ready(function() {
           },
           {
           label: 'Reactive [kVAR',
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(152,25,20,0.40)",
           borderColor: "#981914",
           pointBorderColor: "#981914",
           pointBackgroundColor: "#981914",
@@ -304,7 +304,7 @@ $(document).ready(function() {
                   hour: 'HH:mm'
                 },
                 unitStepSize: 4,
-                min: (moment().subtract(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00"),
+                min: (moment().subtract(0, 'days').format("YYYY-MM-DD")).concat(" 00:00:00"),
                 max: (moment().add(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00")
               },
               scaleLabel: {
@@ -352,19 +352,22 @@ function ShowEnergies() {
       result = data.result;
       timestamp = data.timestamp;
       if (variable == "energy_watt") {
+        gaugewatt.maxValue = parseFloat(80);
         gaugewatt.set(parseFloat(result));
-        document.getElementById("goal-text-watt").innerHTML = 410;
-        document.getElementById("gauge-text-watt").innerHTML = 0;
       } else if (variable == "energy_va") {
+        gaugeva.maxValue = parseFloat(80);
         gaugeva.set(parseFloat(result));
-        document.getElementById("goal-text-va").innerHTML = 410;
-        document.getElementById("gauge-text-va").innerHTML = 0;
       } else if (variable == "energy_var") {
+        gaugevar.maxValue = parseFloat(80);
         gaugevar.set(parseFloat(result));
-        document.getElementById("goal-text-var").innerHTML = 410;
-        document.getElementById("gauge-text-var").innerHTML = 0;
+      } else if (variable == "total_delivered_energy") {
+        timestamp = data.timestamp;
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
+        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = result;
+        document.getElementById("subtitle_reactive_energy").innerHTML = result;
+        document.getElementById("subtitle_apparent_energy").innerHTML = result;
       } else {
         document.getElementById(variable).innerHTML = result;
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
@@ -373,6 +376,8 @@ function ShowEnergies() {
     ajax_call("json", "energy_watt", '<%= load_energies_path %>', load_energies, true);
     ajax_call("json", "energy_va", '<%= load_energies_path %>', load_energies, true);
     ajax_call("json", "energy_var", '<%= load_energies_path %>', load_energies, true);
+    ajax_call("json", "total_delivered_energy", '<%= load_energies_path %>', load_energies, true);
+    ajax_call("json", "last_update", '<%= load_energies_path %>', load_energies, false);
     ajax_call("json", "timestamp", '<%= load_energies_path %>', load_energies, false);
   }
   $(document).ready(function() {
