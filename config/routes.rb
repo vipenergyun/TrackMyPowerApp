@@ -34,6 +34,9 @@ Rails.application.routes.draw do
   get '/measurements/shark_panels_frequency/new', to:'measurements#new_shark_panels_frequency'
   get '/measurements/shark_panels_power/new', to:'measurements#new_shark_panels_power'
   get '/measurements/shark_panels_energy/new', to:'measurements#new_shark_panels_energy'
+  get '/measurements/shark_panels_phase_voltages/new', to:'measurements#new_shark_panels_phase_voltages'
+  get '/measurements/shark_panels_line_voltages/new', to:'measurements#new_shark_panels_line_voltages'
+  get '/measurements/shark_panels_currents/new', to:'measurements#new_shark_panels_currents'
 
   #routes for AJAX Calls controller
   get '/load_electrical', to: 'ajax_calls#load_electrical', as: :load_electrical

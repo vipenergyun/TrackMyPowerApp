@@ -164,6 +164,57 @@ class MeasurementsController < ApplicationController
     end
   end
 
+  def new_shark_panels_currents
+    accepted = {}
+    accepted[:current_a] = params[:current_a]
+    accepted[:phase_a] = params[:phase_a]
+    accepted[:current_b] = params[:current_b]
+    accepted[:phase_b] = params[:phase_b]
+    accepted[:current_c] = params[:current_c]
+    accepted[:phase_c] = params[:phase_c]
+    @shark_panels_currents_measurement = SharkPanelsCurrentsMeasurement.new(accepted)
+    attempt = @shark_panels_currents_measurement.save
+    if attempt
+      create_notifications(SharkPanelsCurrentsMeasurement)
+      render html: "SharkPanelsCurrentsMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_panels_line_voltages
+    accepted = {}
+    accepted[:voltage_ab] = params[:voltages_ab]
+    accepted[:phase_ab] = params[:phase_ab]
+    accepted[:voltage_bc] = params[:voltages_bc]
+    accepted[:phase_bc] = params[:phase_bc]
+    accepted[:voltage_ca] = params[:voltages_ca]
+    accepted[:phase_ca] = params[:phase_ca]
+    @shark_panels_line_voltages_measurement = SharkPanelsLineVoltagesMeasurement.new(accepted)
+    attempt = @shark_panels_line_voltages_measurement.save
+    if attempt
+      create_notifications(SharkPanelsLineVoltagesMeasurement)
+      render html: "SharkPanelsLineVoltagesMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_panels_phase_voltages
+    accepted = {}
+    accepted[:voltage_a] = params[:voltage_a]
+    accepted[:voltage_b] = params[:voltage_b]
+    accepted[:voltage_c] = params[:voltage_c]
+    @shark_panels_phase_voltages_measurement = SharkPanelsPhaseVoltagesMeasurement.new(accepted)
+    attempt = @shark_panels_phase_voltages_measurement.save
+    if attempt
+      create_notifications(SharkPanelsPhaseVoltagesMeasurement)
+      render html: "SharkPanelsPhaseVoltagesMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
   def new_wunderground
     station_id = 'IATLNTIC4'
     w_info = open("http://api.wunderground.com/api/606f3f6977348613/conditions/q/pws:#{station_id}.json")
