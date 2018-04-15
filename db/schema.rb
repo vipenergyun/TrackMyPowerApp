@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171105185614) do
+ActiveRecord::Schema.define(version: 20180415074320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,29 @@ ActiveRecord::Schema.define(version: 20171105185614) do
     t.datetime "updated_at", null: false
     t.integer  "order"
     t.index ["page_id"], name: "index_rows_on_page_id", using: :btree
+  end
+
+  create_table "shark_panels_energy_measurements", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.float    "energy_watt"
+    t.float    "energy_va"
+    t.float    "energy_var"
+  end
+
+  create_table "shark_panels_frequency_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "freqy"
+    t.float    "pfactor"
+  end
+
+  create_table "shark_panels_power_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "power_watt"
+    t.float    "power_va"
+    t.float    "power_var"
   end
 
   create_table "streams", force: :cascade do |t|

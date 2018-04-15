@@ -25,22 +25,6 @@ class MeasurementsController < ApplicationController
     end
   end
 
-  def new_training_data
-    accepted = {}
-    accepted[:x] = params[:x]
-    accepted[:y] = params[:y]
-    accepted[:z] = params[:z]
-    accepted[:label] = params[:label]
-    @training_data_measurement = TrainingDataMeasurement.new(accepted)
-    attempt = @training_data_measurement.save
-    if attempt
-      create_notifications(TrainingDataMeasurement)
-      render html: "TrainingDataMeasurements #{accepted} saved successfully!", layout: true
-    else
-      render html: "Error saving to DB. Please check your GET URL.", layout: true
-    end
-  end
-
   def new_internal_conditions
     accepted = {}
     accepted[:temperature_int] = params[:temperature_int]
@@ -136,45 +120,45 @@ class MeasurementsController < ApplicationController
     end
   end
 
-  def new_shark_p_frequency
+  def new_shark_panels_frequency
     accepted = {}
     accepted[:freqy] = params[:freqy]
     accepted[:pfactor] = params[:pfactor]
-    @shak_p_frequency_measurement = SharkPFrequencyMeasurement.new(accepted)
-    attempt = @shak_p_frequency_measurement.save
+    @shark_panels_frequency_measurement = SharkPanelsFrequencyMeasurement.new(accepted)
+    attempt = @shark_panels_frequency_measurement.save
     if attempt
-      create_notifications(SharkPFrequencyMeasurement)
-      render html: "SharkPFrequencyMeasurement #{accepted} saved successfully!", layout: true
+      create_notifications(SharkPanelsFrequencyMeasurement)
+      render html: "SharkPanelsFrequencyMeasurement #{accepted} saved successfully!", layout: true
     else
       render html: "Error saving to DB. Please check your GET URL.", layout: true
     end
   end
 
-  def new_shark_p_power
+  def new_shark_panels_power
     accepted = {}
-    accepted[:watt] = params[:watt]
-    accepted[:va] = params[:va]
-    accepted[:var] = params[:var]
-    @shak_p_power_measurement = SharkPPowerMeasurement.new(accepted)
-    attempt = @shak_p_power_measurement.save
+    accepted[:power_watt] = params[:power_watt]
+    accepted[:power_va] = params[:power_va]
+    accepted[:power_var] = params[:power_var]
+    @shark_panels_power_measurement = SharkPanelsPowerMeasurement.new(accepted)
+    attempt = @shark_panels_power_measurement.save
     if attempt
-      create_notifications(SharkPPowerMeasurement)
-      render html: "SharkPPowerMeasurement #{accepted} saved successfully!", layout: true
+      create_notifications(SharkPanelsPowerMeasurement)
+      render html: "SharkPanelsPowerMeasurement #{accepted} saved successfully!", layout: true
     else
       render html: "Error saving to DB. Please check your GET URL.", layout: true
     end
   end
 
-  def new_shark_p_energy
+  def new_shark_panels_energy
     accepted = {}
-    accepted[:watth] = params[:watth]
-    accepted[:vah] = params[:vah]
-    accepted[:varh] = params[:varh]
-    @shak_p_energy_measurement = SharkPEnergyMeasurement.new(accepted)
-    attempt = @shak_p_energy_measurement.save
+    accepted[:energy_watt] = params[:energy_watt]
+    accepted[:energy_va] = params[:energy_va]
+    accepted[:energy_var] = params[:energy_var]
+    @shark_panels_energy_measurement = SharkPanelsEnergyMeasurement.new(accepted)
+    attempt = @shark_panels_energy_measurement.save
     if attempt
-      create_notifications(SharkPEnergyMeasurement)
-      render html: "SharkPEnergyMeasurement #{accepted} saved successfully!", layout: true
+      create_notifications(SharkPanelsEnergyMeasurement)
+      render html: "SharkPanelsEnergyMeasurement #{accepted} saved successfully!", layout: true
     else
       render html: "Error saving to DB. Please check your GET URL.", layout: true
     end

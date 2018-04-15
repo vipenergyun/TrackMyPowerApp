@@ -1,0 +1,2 @@
+class SharkPanelsFrequencyMeasurement < ApplicationRecord
+end

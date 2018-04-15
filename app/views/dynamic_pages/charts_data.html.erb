@@ -1,6 +1,73 @@
 <% provide(:page_title, @page.title) %>
 <% provide(:title, @page.title) %>
 
+<% content_for :weather_report do %>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="temperature">
+        <a id="fahrenheit" onclick="unitsTemperature(this)" href="javascript:void(0);"><span id="spanF">F</span></a>
+        <a id="celsius" onclick="" href="javascript:void(0);"><span id="spanC" style="font-weight: bold">C</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="weather-icon">
+        <canvas height="84" width="84" id="partly-cloudy-day"></canvas>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <h1 id="temperature" style="text-align: right;"></h1>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row weather-days">
+    <div class="col-sm-3">
+      <div class="daily-weather">
+        <h2 class="day"><b>UV</b><br><small>[ Index ]</small></h2>
+        <h3 class=" " id="uv_index" style="text-align: center;"></h3>
+        <h2 style="font-size: 32px;"><i class="wi wi-hot centered-ico"></i></h2>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="daily-weather">
+        <h2 class="day"><b>Solar</b> <br><small>[ W/m<sup>2</sup> ]</small></h2>
+        <h3 class=" " id="solar_radiation" style="text-align: center;"></h3>
+        <canvas class="centered-canvas" id="clear-day" width="32" height="32"></canvas>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="daily-weather">
+        <h2 class="day"><b>Humidity</b> <br><small>[ % ]</small></h2>
+        <h3 class=" " id="humidity" style="text-align: center;"></h3>
+        <h2 style="font-size: 32px;"><i class="wi wi-raindrops centered-ico"></i></h2>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="daily-weather">
+        <h2 class="day"><b>Wind</b> <br><small>[ km/h ]</small></h2>
+        <h3 class="" id=wind_speed style="text-align: center"></h3>
+        <canvas class="centered-canvas" height="32" width="32" id="wind"></canvas>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+<% end %>
+
+<% content_for :wind do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="windChart" height="225" width="500" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
+<% content_for :psh do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="hspChart" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
+<%
+=begin %>
 <% content_for :voltage do %>
   <div class="demo-container resize_chart" style="height:280px">
     <canvas id="voltageChart" class="chartjs-responsive"></canvas>
@@ -37,7 +104,208 @@
   </div>
 <% end %>
 
+<%
+=end %>
+
 <% content_for :page_scripts do %>
+<script>
+  $(document).ready(function() {
+    var wind_chart = function (data) {
+      labels = data.labels;
+      var ctx = document.getElementById("windChart").getContext('2d');
+      var source = {
+        labels: labels,
+        datasets: [{
+          label: data[2].date,
+          backgroundColor: "rgba(3, 88, 106, 0.2)",
+          borderColor: "rgba(3, 88, 106, 0.80)",
+          pointBorderColor: "rgba(3, 88, 106, 0.80)",
+          pointBackgroundColor: "rgba(3, 88, 106, 0.80)",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          data: Object.values(data[2].result)
+        },
+        {
+          label: data[1].date,
+          backgroundColor: "rgba(38, 15, 154, 0.2)",
+          borderColor: "rgba(38, 15, 154, 0.85)",
+          pointColor: "rgba(38, 15, 154, 0.85)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(151,17,205,1)",
+          data: Object.values(data[1].result)
+        },
+        {
+          label: data[0].date,
+          backgroundColor: "rgba(38, 155, 154, 0.2)",
+          borderColor: "rgba(38, 155, 154, 0.85)",
+          pointColor: "rgba(38, 155, 154, 0.85)",
+          pointStrokeColor: "#fff",
+          pointHighlightFill: "#fff",
+          pointHighlightStroke: "rgba(151,187,205,1)",
+          data: Object.values(data[0].result)
+        }]
+      };
+      var canvasRadar = new Chart(ctx, {
+        type: 'radar',
+        data: source,
+        option: {
+          legend: {
+            display: true
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+
+    var hsp_chart = function (data) {
+      labels = data.labels;
+      values = data.values;
+      var ctx = document.getElementById("hspChart").getContext('2d');
+
+      var format_data = {
+        labels: labels,
+        datasets: [{
+          label: 'HSP',
+          backgroundColor: "#249FB4",
+          data: values
+        }]
+      };
+
+      var barChartSol = new Chart(ctx, {
+        type: 'bar',
+        data: format_data,
+        options: {
+          tooltips: {
+            mode: 'label'
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Days'
+              }
+            }],
+            yAxes: [{
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'HSP [kWh/m\xB2/d]'
+              }
+          }]
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
+    ajax_call("json", "wind_med1", '<%= wind_chart_path %>', wind_chart, false);
+    ajax_call("json", "hsp", '<%= hsp_chart_path %>', hsp_chart, false);
+  });
+</script>
+
+<!-- Temperature Units Change -->
+<script>
+current_unit = "celsius";
+var temp_before, temp_after;
+function unitsTemperature(element){
+  if(element.id == "celsius")
+  {
+    if(current_unit == "fahrenheit")
+    {
+      temp_before = parseFloat(($("h1#temperature").text()).split("°")[0]);
+      temp_after = (temp_before - 32) * 5/9;
+      var newtext = "".concat(temp_after.toFixed(2),"°");
+      document.getElementById("temperature").innerHTML = newtext;
+      $("#".concat(element.id)).attr("onclick","");
+      $("#fahrenheit").attr("onclick","unitsTemperature(this)");
+      $("#spanC").css("font-weight","bold");
+      $("#spanF").css("font-weight","normal");
+      current_unit = "celsius";
+    }
+  }
+  else if (element.id == "fahrenheit")
+  {
+    if(current_unit == "celsius")
+    {
+      temp_before = parseFloat(($("h1#temperature").text()).split("°")[0]);
+      temp_after = temp_before*9/5 + 32;
+      var newtext = "".concat(temp_after.toFixed(2),"°");
+      document.getElementById("temperature").innerHTML = newtext;
+      $("#".concat(element.id)).attr("onclick","");
+      $("#celsius").attr("onclick","unitsTemperature(this)");
+      $("#spanC").css("font-weight","normal");
+      $("#spanF").css("font-weight","bold");
+      current_unit = "fahrenheit";
+    }
+  }
+  else
+  {
+    return;
+  }
+}
+</script>
+<!--/Temperature Units Change -->
+
+<!-- Skycons -->
+<script>
+  $(document).ready(function() {
+    var icons = new Skycons({
+        "color": "#73879C"
+      }),
+      list = [
+        "clear-day", "clear-night", "partly-cloudy-day",
+        "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+        "fog"
+      ],
+      i;
+    for (i = list.length; i--;)
+      icons.set(list[i], list[i]);
+    icons.play();
+  });
+</script>
+<!-- /Skycons -->
+
+<script>
+  function ShowWeather() {
+    var load_metereological = function (data) {
+      variable = data.variable;
+      result = data.result;
+      if (variable == "timestamp"){
+        document.getElementById("subtitle_weather_report").innerHTML = result;
+      }else{
+        if (variable == "temperature"){
+          if ($("#spanF").css("font-weight")  == 'bold' || $("#spanF").css("font-weight")  == '700'){
+            result = result*9/5 + 32;
+            result = Math.round(result*100)/100;
+          }
+          result = result + '°';
+        }
+        document.getElementById(variable).innerHTML = result;
+      }
+    }
+    ajax_call("json", "timestamp", '<%= load_metereological_path %>', load_metereological, false);
+    ajax_call("json", "temperature", '<%= load_metereological_path %>', load_metereological, true);
+    ajax_call("json", "uv_index", '<%= load_metereological_path %>', load_metereological, true);
+    ajax_call("json", "solar_radiation", '<%= load_metereological_path %>', load_metereological, true);
+    ajax_call("json", "humidity", '<%= load_metereological_path %>', load_metereological, true);
+    ajax_call("json", "wind_speed", '<%= load_metereological_path %>', load_metereological, true);
+  }
+  $(document).ready(function() {
+    ShowWeather();
+    setInterval(function() {
+        ShowWeather();
+    }, 60000);
+  });
+</script>
+<%
+=begin %>
+
 <script>
   $(document).ready(function() {
     var voltage_chart = function (data) {
@@ -475,5 +743,8 @@
 
   });
 </script>
+
+<%
+=end %>
 <% end %>
 <%= render @page %>
