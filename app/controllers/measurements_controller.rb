@@ -184,11 +184,11 @@ class MeasurementsController < ApplicationController
 
   def new_shark_panels_line_voltages
     accepted = {}
-    accepted[:voltage_ab] = params[:voltages_ab]
+    accepted[:voltage_ab] = params[:voltage_ab]
     accepted[:phase_ab] = params[:phase_ab]
-    accepted[:voltage_bc] = params[:voltages_bc]
+    accepted[:voltage_bc] = params[:voltage_bc]
     accepted[:phase_bc] = params[:phase_bc]
-    accepted[:voltage_ca] = params[:voltages_ca]
+    accepted[:voltage_ca] = params[:voltage_ca]
     accepted[:phase_ca] = params[:phase_ca]
     @shark_panels_line_voltages_measurement = SharkPanelsLineVoltagesMeasurement.new(accepted)
     attempt = @shark_panels_line_voltages_measurement.save
