@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171105185614) do
+ActiveRecord::Schema.define(version: 20180415190857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,62 @@ ActiveRecord::Schema.define(version: 20171105185614) do
     t.datetime "updated_at", null: false
     t.integer  "order"
     t.index ["page_id"], name: "index_rows_on_page_id", using: :btree
+  end
+
+  create_table "shark_panels_currents_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "current_a"
+    t.float    "phase_a"
+    t.float    "current_b"
+    t.float    "phase_b"
+    t.float    "current_c"
+    t.float    "phase_c"
+  end
+
+  create_table "shark_panels_energy_measurements", force: :cascade do |t|
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.float    "energy_watt"
+    t.float    "energy_va"
+    t.float    "energy_var"
+    t.float    "energy_watt2"
+    t.float    "energy_va2"
+    t.float    "energy_var2"
+  end
+
+  create_table "shark_panels_frequency_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "freqy"
+    t.float    "pfactor"
+  end
+
+  create_table "shark_panels_line_voltages_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "voltage_ab"
+    t.float    "phase_ab"
+    t.float    "voltage_bc"
+    t.float    "phase_bc"
+    t.float    "voltage_ca"
+    t.float    "phase_ca"
+  end
+
+  create_table "shark_panels_phase_voltages_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "voltage_a"
+    t.float    "voltage_b"
+    t.float    "voltage_c"
+  end
+
+  create_table "shark_panels_power_measurements", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float    "power_watt"
+    t.float    "power_va"
+    t.float    "power_var"
   end
 
   create_table "streams", force: :cascade do |t|

@@ -31,9 +31,12 @@ Rails.application.routes.draw do
   get '/measurements/panel_conditions/new', to:'measurements#new_panel_conditions'
 
   #routes fot generating measurements for Panels Node.
-  get '/measurements/shark_p_frequency/new', to:'measurements#new_shark_p_frequency'
-  get '/measurements/shark_p_power/new', to:'measurements#new_shark_p_power'
-  get '/measurements/shark_p_energy/new', to:'measurements#new_shark_p_energy'
+  get '/measurements/shark_panels_frequency/new', to:'measurements#new_shark_panels_frequency'
+  get '/measurements/shark_panels_power/new', to:'measurements#new_shark_panels_power'
+  get '/measurements/shark_panels_energy/new', to:'measurements#new_shark_panels_energy'
+  get '/measurements/shark_panels_phase_voltages/new', to:'measurements#new_shark_panels_phase_voltages'
+  get '/measurements/shark_panels_line_voltages/new', to:'measurements#new_shark_panels_line_voltages'
+  get '/measurements/shark_panels_currents/new', to:'measurements#new_shark_panels_currents'
 
   #routes for AJAX Calls controller
   get '/load_electrical', to: 'ajax_calls#load_electrical', as: :load_electrical
@@ -41,6 +44,9 @@ Rails.application.routes.draw do
   get '/load_internal', to: 'ajax_calls#load_internal', as: :load_internal
   get '/load_panel', to: 'ajax_calls#load_panel', as: :load_panel
   get '/load_stream', to: 'ajax_calls#load_stream', as: :load_stream
+  get '/load_energies', to: 'ajax_calls#load_energies', as: :load_energies
+  get '/load_power', to: 'ajax_calls#load_power', as: :load_power
+  get '/power_chart', to: 'ajax_calls#power_chart', as: :power_chart
   get '/voltage_chart', to: 'ajax_calls#voltage_chart', as: :voltage_chart
   get '/energy_chart', to: 'ajax_calls#energy_chart', as: :energy_chart
   get '/wind_chart', to: 'ajax_calls#wind_chart', as: :wind_chart
