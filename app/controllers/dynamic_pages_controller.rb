@@ -1,15 +1,15 @@
 class DynamicPagesController < ApplicationController
   before_action :logged_in_user
   before_action :correct_user
-  def dashboard
+  def panels_report
     @user = current_user
-    @page = Page.find_by(title:"Dashboard",dashboard:current_dashboard)
+    @page = Page.find_by(title:"Panels Report",dashboard:current_dashboard)
     @notifications = last_notifications
   end
 
-  def charts_data
+  def wind_report
     @user = current_user
-    @page = Page.find_by(title:"Data Charts",dashboard:current_dashboard)
+    @page = Page.find_by(title:"Wind Report",dashboard:current_dashboard)
     @notifications = last_notifications
   end
 
