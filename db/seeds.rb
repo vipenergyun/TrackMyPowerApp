@@ -31,7 +31,7 @@ guest_dashboard = Dashboard.find_by(description: "Guest")
 
 #[title, icon, dropdown, link]
 navbar_main_tab_list = [
-  [ "Panels Report", "fa fa-tachometer", false, "/dashboard" ],
+  [ "Panels Report", "fa fa-tachometer", false, "/panels/report" ],
   [ "Wind Report", "fa fa-bar-chart-o", false, "/wind/report" ],
   [ "Export", "fa fa-download", true, "javascript:;" ],
   [ "Alerts", "fa fa-bell", false, "/alerts" ]
