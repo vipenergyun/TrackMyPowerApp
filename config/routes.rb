@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get      '/projects',   to: 'static_pages#projects'
   get      '/smart-grid',   to: 'static_pages#IEEE13'
   get      '/panel',   to: 'static_pages#panel'
-  dynamic_pages =  ["dashboard", "charts_data", "export_tables", "alerts", "nodes"]
+  dynamic_pages =  ["panels_report", "wind_report", "export_tables", "alerts", "nodes"]
   dynamic_pages.each do |page|
     get "/users/:id/#{page.gsub("_","/")}", to: "dynamic_pages##{page}", as: page.to_sym
   end
