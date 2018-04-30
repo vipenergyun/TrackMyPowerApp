@@ -404,13 +404,13 @@ function ShowEnergies() {
       result = data.result;
       timestamp = data.timestamp;
       if (variable == "energy_watt") {
-        gaugewatt.maxValue = parseFloat(80);
+        gaugewatt.maxValue = parseFloat(200);
         gaugewatt.set(parseFloat(result));
       } else if (variable == "energy_va") {
-        gaugeva.maxValue = parseFloat(80);
+        gaugeva.maxValue = parseFloat(200);
         gaugeva.set(parseFloat(result));
       } else if (variable == "energy_var") {
-        gaugevar.maxValue = parseFloat(80);
+        gaugevar.maxValue = parseFloat(200);
         gaugevar.set(parseFloat(result));
       } else if (variable == "total_delivered_energy") {
         timestamp = data.timestamp;
