@@ -404,13 +404,13 @@ function ShowEnergies() {
       result = data.result;
       timestamp = data.timestamp;
       if (variable == "energy_watt") {
-        gaugewatt.maxValue = parseFloat(200);
+        gaugewatt.maxValue = parseFloat(2000);
         gaugewatt.set(parseFloat(result));
       } else if (variable == "energy_va") {
-        gaugeva.maxValue = parseFloat(200);
+        gaugeva.maxValue = parseFloat(2000);
         gaugeva.set(parseFloat(result));
       } else if (variable == "energy_var") {
-        gaugevar.maxValue = parseFloat(200);
+        gaugevar.maxValue = parseFloat(2000);
         gaugevar.set(parseFloat(result));
       } else if (variable == "total_delivered_energy") {
         timestamp = data.timestamp;
@@ -431,6 +431,21 @@ function ShowEnergies() {
     ajax_call("json", "total_delivered_energy", '<%= load_energies_path %>', load_energies, true);
     ajax_call("json", "last_update", '<%= load_energies_path %>', load_energies, false);
     ajax_call("json", "timestamp", '<%= load_energies_path %>', load_energies, false);
+  }
+
+function ShowTilesEnergies() {
+   var load_active_energy = function (data) {
+      variable = data.variable;
+      result = data.result;
+      if (variable == "monthly_active_energy"){
+        timestamp = data.timestamp;
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + result.split(" ")[1];
+        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+      }
+    }
+    ajax_call("json", "energy_watt", '<%= load_active_energy_path %>', load_active_energy, true);
+    ajax_call("json", "monthly_active_energy", '<%= load_active_energy_path %>', load_active_energy, true);
+    ajax_call("json", "timestamp", '<%= load_active_energy_path %>', load_active_energy, false);
   }
   $(document).ready(function() {
     var optwatt = {
@@ -498,8 +513,10 @@ function ShowEnergies() {
     
     $('#gauge').css("width", "100%");
     ShowEnergies();
+    ShowTilesEnergies();
     setInterval(function() {
       ShowEnergies();
+      ShowTilesEnergies();
     }, 60000);
 
   });
