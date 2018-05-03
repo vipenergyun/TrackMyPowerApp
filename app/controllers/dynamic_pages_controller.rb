@@ -3,13 +3,13 @@ class DynamicPagesController < ApplicationController
   before_action :correct_user
   def panels_report
     @user = current_user
-    @page = Page.find_by(title:"Panels Report",dashboard:current_dashboard)
+    @page = Page.find_by(title:"PV Lab - Park10",dashboard:current_dashboard)
     @notifications = last_notifications
   end
 
   def wind_report
     @user = current_user
-    @page = Page.find_by(title:"Wind Report",dashboard:current_dashboard)
+    @page = Page.find_by(title:"Mapuka - BLQ K",dashboard:current_dashboard)
     @notifications = last_notifications
   end
 

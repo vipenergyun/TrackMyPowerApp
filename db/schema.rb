@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180415190857) do
+ActiveRecord::Schema.define(version: 20180503040239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,33 @@ ActiveRecord::Schema.define(version: 20180415190857) do
     t.datetime "updated_at", null: false
     t.integer  "order"
     t.index ["page_id"], name: "index_rows_on_page_id", using: :btree
+  end
+
+  create_table "shark_mapuka_energies_measurements", force: :cascade do |t|
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.float    "energy_watt_mpk"
+    t.float    "energy_var_mpk"
+    t.float    "energy_va_mpk"
+  end
+
+  create_table "shark_mapuka_powers_measurements", force: :cascade do |t|
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.float    "power_watt_mpk"
+    t.float    "power_var_mpk"
+    t.float    "power_va_mpk"
+  end
+
+  create_table "shark_mapuka_variables_measurements", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.float    "voltage_mpk"
+    t.float    "p_voltage"
+    t.float    "current_mpk"
+    t.float    "p_current"
+    t.float    "freq_mpk"
+    t.float    "pf_mpk"
   end
 
   create_table "shark_panels_currents_measurements", force: :cascade do |t|

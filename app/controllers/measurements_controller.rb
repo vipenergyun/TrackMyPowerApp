@@ -215,6 +215,54 @@ class MeasurementsController < ApplicationController
     end
   end
 
+  def new_shark_mapuka_powers
+    accepted = {}
+    accepted[:power_watt_mpk] = params[:power_watt_mpk]
+    accepted[:power_va_mpk] = params[:power_va_mpk]
+    accepted[:power_var_mpk] = params[:power_var_mpk]
+    @shark_mapuka_powers_measurement = SharkMapukaPowersMeasurement.new(accepted)
+    attempt = @shark_mapuka_powers_measurement.save
+    if attempt
+      create_notifications(SharkMapukaPowersMeasurement)
+      render html: "SharkMapukaPowersMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_mapuka_energies
+    accepted = {}
+    accepted[:energy_watt_mpk] = params[:energy_watt_mpk]
+    accepted[:energy_va_mpk] = params[:energy_va_mpk]
+    accepted[:energy_var_mpk] = params[:energy_var_mpk]
+    @shark_mapuka_energies_measurement = SharkMapukaEnergiesMeasurement.new(accepted)
+    attempt = @shark_mapuka_energies_measurement.save
+    if attempt
+      create_notifications(SharkMapukaEnergiesMeasurement)
+      render html: "SharkMapukaEnergiesMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
+  def new_shark_mapuka_variables
+    accepted = {}
+    accepted[:voltage_mpk] = params[:voltage_mpk]
+    accepted[:p_voltage] = params[:p_voltage]
+    accepted[:current_mpk] = params[:current_mpk]
+    accepted[:p_current] = params[:p_current]
+    accepted[:freq_mpk] = params[:freq_mpk]
+    accepted[:pf_mpk] = params[:pf_mpk]
+    @shark_mapuka_variables_measurement = SharkMapukaVariablesMeasurement.new(accepted)
+    attempt = @shark_mapuka_variables_measurement.save
+    if attempt
+      create_notifications(SharkMapukaEnergiesMeasurement)
+      render html: "SharkMapukaVariablesMeasurement #{accepted} saved successfully!", layout: true
+    else
+      render html: "Error saving to DB. Please check your GET URL.", layout: true
+    end
+  end
+
   def new_wunderground
     station_id = 'IATLNTIC4'
     w_info = open("http://api.wunderground.com/api/606f3f6977348613/conditions/q/pws:#{station_id}.json")

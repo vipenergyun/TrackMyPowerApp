@@ -1,0 +1,2 @@
+class SharkMapukaVariablesMeasurement < ApplicationRecord
+end

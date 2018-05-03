@@ -37,6 +37,9 @@ Rails.application.routes.draw do
   get '/measurements/shark_panels_phase_voltages/new', to:'measurements#new_shark_panels_phase_voltages'
   get '/measurements/shark_panels_line_voltages/new', to:'measurements#new_shark_panels_line_voltages'
   get '/measurements/shark_panels_currents/new', to:'measurements#new_shark_panels_currents'
+  get '/measurements/shark_mapuka_variables/new', to:'measurements#new_shark_mapuka_variables'
+  get '/measurements/shark_mapuka_powers/new', to:'measurements#new_shark_mapuka_powers'
+  get '/measurements/shark_mapuka_energies/new', to:'measurements#new_shark_mapuka_energies'
 
   #routes for AJAX Calls controller
   get '/load_electrical', to: 'ajax_calls#load_electrical', as: :load_electrical
@@ -45,8 +48,11 @@ Rails.application.routes.draw do
   get '/load_panel', to: 'ajax_calls#load_panel', as: :load_panel
   get '/load_stream', to: 'ajax_calls#load_stream', as: :load_stream
   get '/load_energies', to: 'ajax_calls#load_energies', as: :load_energies
+  get '/load_energies_mpk', to: 'ajax_calls#load_energies_mpk', as: :load_energies_mpk
+  get '/load_active_energy', to: 'ajax_calls#load_active_energy', as: :load_active_energy
   get '/load_power', to: 'ajax_calls#load_power', as: :load_power
   get '/power_chart', to: 'ajax_calls#power_chart', as: :power_chart
+  get '/power_mpk_chart', to: 'ajax_calls#power_mpk_chart', as: :power_mpk_chart
   get '/voltage_chart', to: 'ajax_calls#voltage_chart', as: :voltage_chart
   get '/energy_chart', to: 'ajax_calls#energy_chart', as: :energy_chart
   get '/wind_chart', to: 'ajax_calls#wind_chart', as: :wind_chart
