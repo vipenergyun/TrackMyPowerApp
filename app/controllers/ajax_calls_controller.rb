@@ -5,6 +5,138 @@ class AjaxCallsController < ApplicationController
 
   layout 'blank'
 
+  def load_energies
+    variable = params[:variable]
+    units = params[:units]
+    variable = "created_at" if variable.downcase == "last_update"
+    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
+    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
+    @result = 'N/A' if @result.blank?
+    timestamp = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago" if !SharkPanelsEnergyMeasurement.last.nil?
+    if variable.downcase == "timestamp"
+      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
+    end
+    case variable
+    when "energy_watt"
+      variable = "energy_watt"
+      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
+    when "energy_va"
+      variable = "energy_va"
+      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
+    when "energy_var"
+      variable = "energy_var"
+      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
+    when "created_at"
+      @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
+      timestamp = @result.strftime("%F")
+      @result = @result.strftime("%T")
+      variable = "last_update"
+    end
+    if variable.downcase == "total_delivered_energy"
+      @result = SharkPanelsEnergyMeasurement.maximum("energy_watt")
+      timestamp = "Since April 2018"
+    end
+    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
+  end
+
+  def load_energies_mpk
+    variable = params[:variable]
+    units = params[:units]
+    variable = "created_at" if variable.downcase == "last_update"
+    @result = SharkMapukaEnergiesMeasurement.last[variable] if !SharkMapukaEnergiesMeasurement.last.nil?
+    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
+    @result = 'N/A' if @result.blank?
+    timestamp = "#{time_ago_in_words(SharkMapukaEnergiesMeasurement.last.created_at)} ago" if !SharkMapukaEnergiesMeasurement.last.nil?
+    if variable.downcase == "timestamp"
+      @result = "#{time_ago_in_words(SharkMapukaEnergiesMeasurement.last.created_at)} ago"
+    end
+    case variable
+    when "energy_watt_mpk"
+      variable = "energy_watt_mpk"
+      @result = SharkMapukaEnergiesMeasurement.last["energy_watt_mpk"]
+    when "energy_va_mpk"
+      variable = "energy_va_mpk"
+      @result = SharkMapukaEnergiesMeasurement.last["energy_va_mpk"]
+    when "energy_var_mpk"
+      variable = "energy_var_mpk"
+      @result = SharkMapukaEnergiesMeasurement.last["energy_var_mpk"]
+    when "created_at"
+      @result = SharkMapukaEnergiesMeasurement.last[variable] if !SharkMapukaEnergiesMeasurement.last.nil?
+      timestamp = @result.strftime("%F")
+      @result = @result.strftime("%T")
+      variable = "last_update"
+    end
+    if variable.downcase == "total_delivered_energy"
+      @result = SharkMapukaEnergiesMeasurement.maximum("energy_watt_mpk")
+      timestamp = "Since April 2018"
+    end
+    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
+  end
+
+  def load_active_energy
+    variable = params[:variable]
+    units = params[:units]
+    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
+    if variable.downcase == "monthly_active_energy"
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      max_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum(variable).to_f
+      min_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum(variable).to_f
+      @result = max_current_month - min_current_month
+      timestamp = "Last month"
+    end
+    @result = "#{@result} #{units(variable)}" if units == "true"
+    if variable.downcase == "timestamp"
+      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
+    end
+    if @result.blank? || @result.nil?
+      @result = 'N/A'
+    end
+    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
+  end
+
+  def power_mpk_chart
+    @result = SharkMapukaPowersMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt_mpk, :power_va_mpk, :power_var_mpk, :created_at)
+    timestamp =  @result.pluck(:created_at)
+    timestamp.collect! { |element| element.strftime("%F %T") }
+    x_data = @result.pluck(:power_watt_mpk)
+    y_data = @result.pluck(:power_va_mpk)
+    z_data = @result.pluck(:power_var_mpk)
+    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
+  end
+
+  def power_chart
+    @result = SharkPanelsPowerMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt, :power_va, :power_var, :created_at)
+    timestamp =  @result.pluck(:created_at)
+    timestamp.collect! { |element| element.strftime("%F %T") }
+    x_data = @result.pluck(:power_watt)
+    y_data = @result.pluck(:power_va)
+    z_data = @result.pluck(:power_var)
+    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
+  end
+
+  def hsp_chart
+    hsps = []
+    days = []
+    6.downto(0).to_a.each do |n_day|
+      start = n_day.day.ago.change(hour: 0, min: 0, sec: 0)
+      stop = n_day.day.ago.change(hour: 23, min: 59, sec: 59)
+      day_name = start.strftime("%A")
+      query = MeteorologicalMeasurement.where("created_at >= ? and created_at <= ?", start, stop).order(:created_at)
+      calc = 0.0
+      query.select(:solar_radiation).each_with_index do |entry, index|
+        if index == 0 || index == query.count-1
+          calc = calc + entry.solar_radiation/24.0
+        else
+          calc = calc + entry.solar_radiation/12.0
+        end
+      end
+      hsps.push(((calc/10.0).round)/100.0)
+      days.push(day_name)
+    end
+    days.pop and days.push("Today")
+    render json: { values: hsps, labels: days }
+  end
+
   def load_electrical
     variable = params[:variable]
     units = params[:units]
@@ -107,50 +239,6 @@ class AjaxCallsController < ApplicationController
     render json: { url: url, timestamp: timestamp }
   end
 
-  def load_energies
-    variable = params[:variable]
-    units = params[:units]
-    variable = "created_at" if variable.downcase == "last_update"
-    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
-    @result = "#{@result.to_i}#{units(variable)}" if units == "true"
-    @result = 'N/A' if @result.blank?
-    timestamp = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago" if !WindTurbineSpeedMeasurement.last.nil?
-    if variable.downcase == "timestamp"
-      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
-    end
-    case variable
-    when "energy_watt"
-      variable = "energy_watt"
-      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
-    when "energy_va"
-      variable = "energy_va"
-      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
-    when "energy_var"
-      variable = "energy_var"
-      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
-    when "created_at"
-      @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
-      timestamp = @result.strftime("%F")
-      @result = @result.strftime("%T")
-      variable = "last_update"
-    end
-    if variable.downcase == "total_delivered_energy"
-      @result = SharkPanelsEnergyMeasurement.maximum("energy_watt")
-      timestamp = "Since April 2018"
-    end
-    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
-  end
-
-  def power_chart
-    @result = SharkPanelsPowerMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt, :power_va, :power_var, :created_at)
-    timestamp =  @result.pluck(:created_at)
-    timestamp.collect! { |element| element.strftime("%F %T") }
-    x_data = @result.pluck(:power_watt)
-    y_data = @result.pluck(:power_va)
-    z_data = @result.pluck(:power_var)
-    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
-  end
-
   def voltage_chart
     @result = ElectricalMeasurement.where('created_at >= ?', 1.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:voltage_med1, :created_at)
     timestamp =  @result.pluck(:created_at)
@@ -191,29 +279,6 @@ class AjaxCallsController < ApplicationController
     cardinals.pop
     output_hash[:labels] = cardinals
     render json: output_hash
-  end
-
-  def hsp_chart
-    hsps = []
-    days = []
-    6.downto(0).to_a.each do |n_day|
-      start = n_day.day.ago.change(hour: 0, min: 0, sec: 0)
-      stop = n_day.day.ago.change(hour: 23, min: 59, sec: 59)
-      day_name = start.strftime("%A")
-      query = MeteorologicalMeasurement.where("created_at >= ? and created_at <= ?", start, stop).order(:created_at)
-      calc = 0.0
-      query.select(:solar_radiation).each_with_index do |entry, index|
-        if index == 0 || index == query.count-1
-          calc = calc + entry.solar_radiation/24.0
-        else
-          calc = calc + entry.solar_radiation/12.0
-        end
-      end
-      hsps.push(((calc/10.0).round)/100.0)
-      days.push(day_name)
-    end
-    days.pop and days.push("Today")
-    render json: { values: hsps, labels: days }
   end
 
   def temperature_chart
@@ -401,8 +466,6 @@ class AjaxCallsController < ApplicationController
     render json: { columns: columns_hash, dataSet: dataSet}
   end
 
-
-
   def new_alert
     alert_params = params.require(:variable).permit(:type,:variable,:comparator,:value1,:value2,:email,:enabled)
     alert_params["type"] = alert_params["type"].squish.parameterize(separator: '_')
@@ -469,7 +532,6 @@ class AjaxCallsController < ApplicationController
       format.html { render partial: 'layouts/navbar_notifications' }
       format.json { render json: response[:json] }
     end
-
   end
 
   def refresh_notification_list

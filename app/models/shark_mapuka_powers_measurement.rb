@@ -1,0 +1,2 @@
+class SharkMapukaPowersMeasurement < ApplicationRecord
+end
