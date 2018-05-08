@@ -72,10 +72,12 @@ end
 def create_general_tiles(dashboard)
   tiles_list = [
     [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Last Update", "fa fa-refresh", "Last Update", 1],
-    #[Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Monthly Active Energy", "fa fa-flash", "Monthly Active Energy", 2],
-    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 2],
+    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Monthly Active Energy", "fa fa-flash", "Monthly Active Energy", 2],
+    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 3],
     [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Last Update", "fa fa-refresh", "Last Update", 1],
-    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 2]
+    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Monthly Active Energy", "fa fa-flash", "Monthly Active Energy", 2],
+    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 3]
+
   ]
   tiles_list.each do |page, title, icon, description, order|
     Tile.create(title:title, description:description, icon: icon, order: order, page: page)

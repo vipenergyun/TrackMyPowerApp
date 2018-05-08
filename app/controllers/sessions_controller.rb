@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   layout "user_form"
+  skip_before_action :verify_authenticity_token
 
   #Action for new session form (login)
   def new

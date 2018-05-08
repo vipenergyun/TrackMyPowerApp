@@ -2,7 +2,7 @@
 
 <% content_for :active_energy do %>
   <ul class="quick-list">
-    <li><i class="fa fa-flash"></i>Energy [kWh]:</br><span id="gauge-actual-watt-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy [Wh]:</br><span id="gauge-actual-watt-mpk"></span></li>
   </ul>
   <!-- <h2 style="text-align: center;"><b> Active Energy</b><br> -->
   <div style="text-align: center;">
@@ -12,14 +12,14 @@
          <span id="gauge-text-watt-mpk" class="gauge-value pull-left"></span>
          <span id="goal-text-watt-mpk" class="goal-value pull-right" style="float: left;"></span>
          </br>
-         <span style="font-weight: bold;text-align: center;display: block;">kWh</span>
+         <span style="font-weight: bold;text-align: center;display: block;">Wh</span>
       </div>
   </div>
 <% end %>
 
 <% content_for :apparent_energy do %>
   <ul class="quick-list">
-    <li><i class="fa fa-flash"></i>Energy [kVAh]:</br><span id="gauge-actual-va-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy [VAh]:</br><span id="gauge-actual-va-mpk"></span></li>
   </ul>
     <!-- <h2 style="text-align: center;"><b>Apparent Energy</b><br> -->
     <div style="text-align: center;">
@@ -29,7 +29,7 @@
         <span id="gauge-text-va-mpk" class="gauge-value pull-left"></span>
         <span id="goal-text-va-mpk" class="goal-value pull-right" style="float: left;"></span>
         </br>
-        <span style="font-weight: bold;text-align: center;display: block;">kVAh</span>
+        <span style="font-weight: bold;text-align: center;display: block;">VAh</span>
       </div>
     </div>
 <% end %>
@@ -37,7 +37,7 @@
 <% content_for :reactive_energy do %>
   <ul class="quick-list">
     
-    <li><i class="fa fa-flash"></i>Energy[kVARh]:</br><span id="gauge-actual-var-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy[VARh]:</br><span id="gauge-actual-var-mpk"></span></li>
   </ul>
     <!-- <h2 style="text-align: center;"><b>Reactive Energy</b><br> -->
     <div style="text-align: center;">
@@ -47,7 +47,7 @@
         <span id="gauge-text-var-mpk" class="gauge-value pull-left"></span>
         <span id="goal-text-var-mpk" class="goal-value pull-right" style="float: left;"></span>
         </br>
-        <span style="font-weight: bold;text-align: center;display: block;">kVARh</span>
+        <span style="font-weight: bold;text-align: center;display: block;">VARh</span>
       </div>
     </div>
 <% end %>
@@ -224,7 +224,7 @@ $(document).ready(function() {
       var lineData = {
         labels: time,
         datasets: [{
-          label: 'Active [kW]',
+          label: 'Active [W]',
           backgroundColor: "rgba(236,190,20,0.40)",
           borderColor: "#ECBE14",
           pointBorderColor: "#ECBE14",
@@ -238,7 +238,7 @@ $(document).ready(function() {
           data: x_data
           },
           {
-          label: 'Apparent [kVA]',
+          label: 'Apparent [VA]',
           backgroundColor: "rgba(242,143,63,0.40)",
           borderColor: "#F28F3F",
           pointBorderColor: "#F28F3F",
@@ -252,7 +252,7 @@ $(document).ready(function() {
           data: y_data
           },
           {
-          label: 'Reactive [kVAR]',
+          label: 'Reactive [VAR]',
           backgroundColor: "rgba(152,25,20,0.40)",
           borderColor: "#981914",
           pointBorderColor: "#981914",
@@ -422,9 +422,13 @@ function unitsTemperature(element){
       } else if (variable == "energy_var_mpk") {
         gaugevarmpk.maxValue = parseFloat(2000);
         gaugevarmpk.set(parseFloat(result));
+      } else if (variable == "monthly_active_energy") {
+        timestamp = data.timestamp;
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
+        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "total_delivered_energy") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = result;
@@ -438,7 +442,8 @@ function unitsTemperature(element){
     ajax_call("json", "energy_watt_mpk", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "energy_va_mpk", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "energy_var_mpk", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
-    ajax_call("json", "total_delivered_energy", '<%= load_energies_mpk_path %>', load_energies_mpk, true)
+    ajax_call("json", "total_delivered_energy", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
+    ajax_call("json", "monthly_active_energy", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "last_update", '<%= load_energies_mpk_path %>', load_energies_mpk, false);
     ajax_call("json", "timestamp", '<%= load_energies_mpk_path %>', load_energies_mpk, false);
   }

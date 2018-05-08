@@ -398,56 +398,62 @@ $(document).ready(function() {
 </script>
 
 <script>
-function ShowEnergies() {
-    var load_energies = function (data) {
-      variable = data.variable;
-      result = data.result;
-      timestamp = data.timestamp;
-      if (variable == "energy_watt") {
-        gaugewatt.maxValue = parseFloat(2000);
-        gaugewatt.set(parseFloat(result));
-      } else if (variable == "energy_va") {
-        gaugeva.maxValue = parseFloat(2000);
-        gaugeva.set(parseFloat(result));
-      } else if (variable == "energy_var") {
-        gaugevar.maxValue = parseFloat(2000);
-        gaugevar.set(parseFloat(result));
-      } else if (variable == "total_delivered_energy") {
-        timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
-        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
-      } else if (variable == "timestamp" ){
-        document.getElementById("subtitle_active_energy").innerHTML = result;
-        document.getElementById("subtitle_reactive_energy").innerHTML = result;
-        document.getElementById("subtitle_apparent_energy").innerHTML = result;
-      } else {
-        document.getElementById(variable).innerHTML = result;
-        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
-      }
-    }
-    ajax_call("json", "energy_watt", '<%= load_energies_path %>', load_energies, true);
-    ajax_call("json", "energy_va", '<%= load_energies_path %>', load_energies, true);
-    ajax_call("json", "energy_var", '<%= load_energies_path %>', load_energies, true);
-    ajax_call("json", "total_delivered_energy", '<%= load_energies_path %>', load_energies, true);
-    ajax_call("json", "last_update", '<%= load_energies_path %>', load_energies, false);
-    ajax_call("json", "timestamp", '<%= load_energies_path %>', load_energies, false);
-  }
-
 function ShowTilesEnergies() {
-   var load_active_energy = function (data) {
-      variable = data.variable;
-      result = data.result;
-      if (variable == "monthly_active_energy"){
-        timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + result.split(" ")[1];
-        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
-      }
+  var load_active_energy = function (data) {
+    variable = data.variable;
+    result = data.result;
+    if (variable == "monthly_active_energy"){
+      timestamp = data.timestamp;
+      document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['k'];
+      document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
     }
-    ajax_call("json", "energy_watt", '<%= load_active_energy_path %>', load_active_energy, true);
-    ajax_call("json", "monthly_active_energy", '<%= load_active_energy_path %>', load_active_energy, true);
-    ajax_call("json", "timestamp", '<%= load_active_energy_path %>', load_active_energy, false);
   }
-  $(document).ready(function() {
+  ajax_call("json", "energy_watt", '<%= load_active_energy_path %>', load_active_energy, true);
+  ajax_call("json", "monthly_active_energy", '<%= load_active_energy_path %>', load_active_energy, true);
+  ajax_call("json", "timestamp", '<%= load_active_energy_path %>', load_active_energy, false);
+}
+
+function ShowEnergies() {
+  var load_energies = function (data) {
+    variable = data.variable;
+    result = data.result;
+    timestamp = data.timestamp;
+    if (variable == "energy_watt") {
+      gaugewatt.maxValue = parseFloat(2000);
+      gaugewatt.set(parseFloat(result));
+    } else if (variable == "energy_va") {
+      gaugeva.maxValue = parseFloat(2000);
+      gaugeva.set(parseFloat(result));
+    } else if (variable == "energy_var") {
+      gaugevar.maxValue = parseFloat(2000);
+      gaugevar.set(parseFloat(result));
+    } else if (variable == "total_delivered_energy") {
+      timestamp = data.timestamp;
+      document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
+      document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+    } else if (variable == "monthly_active_energy") {
+      timestamp = data.timestamp;
+      document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
+      document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+    } else if (variable == "timestamp" ){
+      document.getElementById("subtitle_active_energy").innerHTML = result;
+      document.getElementById("subtitle_reactive_energy").innerHTML = result;
+      document.getElementById("subtitle_apparent_energy").innerHTML = result;
+    } else {
+      document.getElementById(variable).innerHTML = result;
+      document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+    }
+  }
+  ajax_call("json", "energy_watt", '<%= load_energies_path %>', load_energies, true);
+  ajax_call("json", "energy_va", '<%= load_energies_path %>', load_energies, true);
+  ajax_call("json", "energy_var", '<%= load_energies_path %>', load_energies, true);
+  ajax_call("json", "total_delivered_energy", '<%= load_energies_path %>', load_energies, true);
+  ajax_call("json", "monthly_active_energy", '<%= load_energies_path %>', load_energies, true);
+  ajax_call("json", "last_update", '<%= load_energies_path %>', load_energies, false);
+  ajax_call("json", "timestamp", '<%= load_energies_path %>', load_energies, false);
+}
+
+$(document).ready(function() {
     var optwatt = {
         lines: 12,
         angle: 0,
@@ -518,8 +524,7 @@ function ShowTilesEnergies() {
       ShowEnergies();
       ShowTilesEnergies();
     }, 60000);
-
-  });
+});
 </script>
 
 <%
