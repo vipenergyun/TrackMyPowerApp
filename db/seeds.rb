@@ -72,11 +72,9 @@ end
 def create_general_tiles(dashboard)
   tiles_list = [
     [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Last Update", "fa fa-refresh", "Last Update", 1],
-    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Monthly Active Energy", "fa fa-flash", "Monthly Active Energy", 2],
-    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 3],
+    [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 2],
     [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Last Update", "fa fa-refresh", "Last Update", 1],
-    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Monthly Active Energy", "fa fa-flash", "Monthly Active Energy", 2],
-    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 3]
+    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), "Total Delivered Energy", "fa fa-plug", "Total Delivered Energy", 2]
 
   ]
   tiles_list.each do |page, title, icon, description, order|
@@ -95,6 +93,7 @@ def create_general_rows(dashboard)
     [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), 1, 370, nil],
     [Page.find_by(title: "PV Lab - Park10", dashboard: dashboard), 1, 370, nil],
     [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), 3, 370, nil],
+    [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), 1, 370, nil],
     [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), 1, 370, nil],
     [Page.find_by(title: "Mapuka - BLQ K", dashboard: dashboard), 2, 370, nil],
     #[Page.find_by(title: "Data Charts", dashboard: dashboard), 2, 370, nil],
@@ -121,14 +120,15 @@ def create_general_panels(dashboard)
     [Row.find_by(order: 1, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "Active Energy", nil, nil, 4, nil, nil, nil, nil ],
     [Row.find_by(order: 1, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "Reactive Energy", nil, nil, 4, nil, nil, nil, nil ],
     [Row.find_by(order: 1, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "Apparent Energy", nil, nil, 4, nil, nil, nil, nil ],
-    [Row.find_by(order: 2, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "Power Report", "last 2 days", nil, 12, nil, nil, nil, nil ],
+    [Row.find_by(order: 2, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "Power Report", "daily", nil, 12, nil, nil, nil, nil ],
     [Row.find_by(order: 3, page: Page.find_by(title:"PV Lab - Park10", dashboard: dashboard)), "PSH", "last 7 days", nil, 12, nil, nil, nil, nil ],
     [Row.find_by(order: 1, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Active Energy", nil, nil, 4, nil, nil, nil, nil ],
     [Row.find_by(order: 1, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Reactive Energy", nil, nil, 4, nil, nil, nil, nil ],
     [Row.find_by(order: 1, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Apparent Energy", nil, nil, 4, nil, nil, nil, nil ],
-    [Row.find_by(order: 2, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Power Report", "last 2 days", nil, 12, nil, nil, nil, nil ],
-    [Row.find_by(order: 3, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Weather Report", nil, nil, 4, 1, nil, nil, nil ],
-    [Row.find_by(order: 3, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Wind", "last 3 days", nil, 8, nil, nil, nil, nil ],
+    [Row.find_by(order: 2, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Power Report", "daily", nil, 12, nil, nil, nil, nil ],
+    [Row.find_by(order: 3, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Power Factor Report", "daily", nil, 12, nil, nil, nil, nil ],
+    [Row.find_by(order: 4, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Weather Report", nil, nil, 4, 1, nil, nil, nil ],
+    [Row.find_by(order: 4, page: Page.find_by(title:"Mapuka - BLQ K", dashboard: dashboard)), "Wind", "last 3 days", nil, 8, nil, nil, nil, nil ],
     #[Row.find_by(order: 3, page: Page.find_by(title:"Dashboard", dashboard: dashboard)), "Panel Conditions", nil, nil, 4, 3, nil, nil, nil ],
     #[Row.find_by(order: 1, page: Page.find_by(title:"Data Charts", dashboard: dashboard)), "Voltage", "last 2 days",  nil, 12, nil, nil, nil, nil ],
     #[Row.find_by(order: 2, page: Page.find_by(title:"Data Charts", dashboard: dashboard)), "Energy", "monthly", nil, 12, nil, nil, nil, nil ],
