@@ -36,6 +36,13 @@ class AjaxCallsController < ApplicationController
       @result = SharkPanelsEnergyMeasurement.maximum("energy_watt")
       timestamp = "Since April 2018"
     end
+    if variable.downcase == "monthly_active_energy"
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      max_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt").to_f
+      min_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt").to_f
+      @result = max_current_month - min_current_month
+      timestamp = "Last Month"
+    end
     render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
   end
 
@@ -70,26 +77,12 @@ class AjaxCallsController < ApplicationController
       @result = SharkMapukaEnergiesMeasurement.maximum("energy_watt_mpk")
       timestamp = "Since April 2018"
     end
-    render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
-  end
-
-  def load_active_energy
-    variable = params[:variable]
-    units = params[:units]
-    @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
-    if variable.downcase == "monthly_active_energy"
-      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
-      max_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum(variable).to_f
-      min_current_month = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum(variable).to_f
+     if variable.downcase == "monthly_active_energy"
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0"
+      max_current_month = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt_mpk").to_f
+      min_current_month = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt_mpk").to_f
       @result = max_current_month - min_current_month
-      timestamp = "Last month"
-    end
-    @result = "#{@result} #{units(variable)}" if units == "true"
-    if variable.downcase == "timestamp"
-      @result = "#{time_ago_in_words(SharkPanelsEnergyMeasurement.last.created_at)} ago"
-    end
-    if @result.blank? || @result.nil?
-      @result = 'N/A'
+      timestamp = "Last Month"
     end
     render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
   end
