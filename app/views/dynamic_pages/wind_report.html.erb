@@ -58,6 +58,12 @@
   </div>
 <% end %>
 
+<% content_for :power_factor_report do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="pfMpkChart" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
 <% content_for :weather_report do %>
   <div class="row">
     <div class="col-sm-12">
@@ -314,9 +320,80 @@ $(document).ready(function() {
         }
       });
     }
+    var pf_mpk_chart = function (data) {
+      time = data.timestamp;
+      x_data = data.x_data;
+      var ctx = document.getElementById("pfMpkChart").getContext('2d');
+      var lineData = {
+        labels: time,
+        datasets: [{
+          label: 'Power Factor',
+          backgroundColor: "rgba(236,190,20,0.40)",
+          borderColor: "#ECBE14",
+          pointBorderColor: "#ECBE14",
+          pointBackgroundColor: "#ECBE14",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          linetension: 0,
+          data: x_data
+          }]
+      };
+      var ctx = document.getElementById("pfMpkChart").getContext('2d');
+      var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: lineData,
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: 'hour',
+                displayFormats: {
+                  hour: 'HH:mm'
+                },
+                unitStepSize: 4,
+                min: (moment().subtract(0, 'days').format("YYYY-MM-DD")).concat(" 00:00:00"),
+                max: (moment().add(1, 'days').format("YYYY-MM-DD")).concat(" 00:00:00")
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Time'
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Magnitude'
+              }
+            }]
+          },
+          pan: {
+            enabled: true,
+            mode: 'xy'
+          },
+          zoom: {
+            enabled: true,
+            mode: 'xy',
+            limits: {
+              max: 10,
+              min: 0.5
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: true
+          }
+        }
+      });
+    }
     ajax_call("json", "power_watt_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
     ajax_call("json", "power_va_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
     ajax_call("json", "power_var_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
+    ajax_call("json", "pf_mpk", '<%= pf_mpk_chart_path %>', pf_mpk_chart, false);
 });
 </script>
 

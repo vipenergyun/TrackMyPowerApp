@@ -97,6 +97,14 @@ class AjaxCallsController < ApplicationController
     render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
   end
 
+  def pf_mpk_chart
+    @result = SharkMapukaVariablesMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:pf_mpk, :created_at)
+    timestamp =  @result.pluck(:created_at)
+    timestamp.collect! { |element| element.strftime("%F %T") }
+    x_data = @result.pluck(:pf_mpk)
+    render json: { timestamp: timestamp, x_data: x_data }, layout: true
+  end
+
   def power_chart
     @result = SharkPanelsPowerMeasurement.where('created_at >= ?', 0.day.ago.change(hour: 0, min: 0, sec: 0)).order(:created_at).select(:power_watt, :power_va, :power_var, :created_at)
     timestamp =  @result.pluck(:created_at)
