@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   get '/power_chart', to: 'ajax_calls#power_chart', as: :power_chart
   get '/power_mpk_chart', to: 'ajax_calls#power_mpk_chart', as: :power_mpk_chart
   get '/pf_mpk_chart', to: 'ajax_calls#pf_mpk_chart', as: :pf_mpk_chart
+  get '/monthly_panels_energy_chart', to: 'ajax_calls#monthly_panels_energy_chart', as: :monthly_panels_energy_chart
+  get '/monthly_mpk_energy_chart', to: 'ajax_calls#monthly_mpk_energy_chart', as: :monthly_mpk_energy_chart
   get '/voltage_chart', to: 'ajax_calls#voltage_chart', as: :voltage_chart
   get '/energy_chart', to: 'ajax_calls#energy_chart', as: :energy_chart
   get '/wind_chart', to: 'ajax_calls#wind_chart', as: :wind_chart

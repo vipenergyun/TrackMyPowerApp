@@ -64,6 +64,12 @@
   </div>
 <% end %>
 
+<% content_for :monthly_active_energy do %>
+  <div class="demo-container resize_chart" style="height:280px">
+    <canvas id="mpkEnergyChart" class="chartjs-responsive"></canvas>
+  </div>
+<% end %>
+
 <% content_for :weather_report do %>
   <div class="row">
     <div class="col-sm-12">
@@ -390,9 +396,53 @@ $(document).ready(function() {
         }
       });
     }
+    var monthly_mpk_energy_chart = function (data) {
+      time = data.months;
+      y_data = data.y_data;
+      var ctx2 = document.getElementById("mpkEnergyChart").getContext('2d');
+      var barChartData = {
+        labels: time,
+        datasets: [{
+          label: 'Energy delivered',
+          backgroundColor: "#03586A",
+          data: y_data
+        }]
+      };
+      var barChart = new Chart(ctx2, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+          tooltips: {
+            mode: 'label'
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Month'
+              }
+            }],
+            yAxes: [{
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Energy [Wh]'
+              }
+            }]
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
     ajax_call("json", "power_watt_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
     ajax_call("json", "power_va_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
     ajax_call("json", "power_var_mpk", '<%= power_mpk_chart_path %>', power_mpk_chart, false);
+    ajax_call("json", "energy_watt_mpk", '<%= monthly_mpk_energy_chart_path %>', monthly_mpk_energy_chart, false);
     ajax_call("json", "pf_mpk", '<%= pf_mpk_chart_path %>', pf_mpk_chart, false);
 });
 </script>
