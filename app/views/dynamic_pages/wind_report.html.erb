@@ -232,6 +232,7 @@ $(document).ready(function() {
       x_data = data.x_data;
       y_data = data.y_data;
       z_data = data.z_data;
+      k_data = data.k_data;
       var ctx = document.getElementById("powerMpkChart").getContext('2d');
       var lineData = {
         labels: time,
@@ -275,7 +276,22 @@ $(document).ready(function() {
           pointRadius: 2,
           cubicInterpolationMode: 'default',
           linetension: 0,
-          data: z_data          }]
+          data: z_data
+          },
+          {
+          label: '150 W',
+          backgroundColor: "transparent",
+          borderColor: "#404040",
+          pointBorderColor: "#404040",
+          pointBackgroundColor: "#404040",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointBorderWidth: 1,
+          pointRadius: 2,
+          cubicInterpolationMode: 'default',
+          linetension: 0,
+          data: k_data          
+        }]
       };
       var ctx = document.getElementById("powerMpkChart").getContext('2d');
       var lineChart = new Chart(ctx, {
@@ -557,6 +573,10 @@ function unitsTemperature(element){
         timestamp = data.timestamp;
         document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
+      } else if (variable == "historic_pf") {
+        timestamp = data.timestamp;
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['W/VA'];
+        document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = result;
         document.getElementById("subtitle_reactive_energy").innerHTML = result;
@@ -571,6 +591,7 @@ function unitsTemperature(element){
     ajax_call("json", "energy_var_mpk", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "total_delivered_energy", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "monthly_active_energy", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
+    ajax_call("json", "historic_pf", '<%= load_energies_mpk_path %>', load_energies_mpk, true);
     ajax_call("json", "last_update", '<%= load_energies_mpk_path %>', load_energies_mpk, false);
     ajax_call("json", "timestamp", '<%= load_energies_mpk_path %>', load_energies_mpk, false);
   }
