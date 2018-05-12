@@ -77,12 +77,19 @@ class AjaxCallsController < ApplicationController
       @result = SharkMapukaEnergiesMeasurement.maximum("energy_watt_mpk")
       timestamp = "Since April 2018"
     end
-     if variable.downcase == "monthly_active_energy"
+    if variable.downcase == "monthly_active_energy"
       query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0"
       max_current_month = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt_mpk").to_f
       min_current_month = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt_mpk").to_f
       @result = max_current_month - min_current_month
       timestamp = "Last Month"
+    end
+    if variable.downcase == "historic_pf"
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0 and energy_va_mpk != 0"
+      active_energy = SharkMapukaEnergiesMeasurement.last["energy_watt_mpk"].to_f
+      apparent_energy = SharkMapukaEnergiesMeasurement.last["energy_va_mpk"].to_f
+      @result = active_energy/apparent_energy
+      timestamp = "Last data"
     end
     render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
   end
@@ -94,7 +101,8 @@ class AjaxCallsController < ApplicationController
     x_data = @result.pluck(:power_watt_mpk)
     y_data = @result.pluck(:power_va_mpk)
     z_data = @result.pluck(:power_var_mpk)
-    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data }, layout: true
+    k_data = @result.pluck(150)
+    render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data, k_data: k_data }, layout: true
   end
 
   def pf_mpk_chart
