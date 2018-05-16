@@ -101,7 +101,7 @@ class AjaxCallsController < ApplicationController
     x_data = @result.pluck(:power_watt_mpk)
     y_data = @result.pluck(:power_va_mpk)
     z_data = @result.pluck(:power_var_mpk)
-    k_data = @result.pluck(150)
+    k_data = @result.pluck(100)
     render json: { timestamp: timestamp, x_data: x_data, y_data: y_data, z_data: z_data, k_data: k_data }, layout: true
   end
 
