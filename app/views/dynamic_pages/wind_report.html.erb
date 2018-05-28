@@ -575,7 +575,7 @@ function unitsTemperature(element){
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "historic_pf") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1);
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['%'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = result;
