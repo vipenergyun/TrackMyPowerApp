@@ -88,7 +88,7 @@ class AjaxCallsController < ApplicationController
       query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0 and energy_va_mpk != 0"
       active_energy = SharkMapukaEnergiesMeasurement.last["energy_watt_mpk"]
       apparent_energy = SharkMapukaEnergiesMeasurement.last["energy_va_mpk"]
-      @result = active_energy/apparent_energy
+      @result = (active_energy/apparent_energy)*100
       timestamp = "Last data"
     end
     render json: { result: @result, variable: variable, timestamp: timestamp }, layout: true
