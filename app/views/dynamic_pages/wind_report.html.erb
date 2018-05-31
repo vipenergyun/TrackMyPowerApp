@@ -443,7 +443,7 @@ $(document).ready(function() {
               stacked: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Energy [Wh]'
+                labelString: 'Energy [KWh]'
               }
             }]
           },
@@ -567,11 +567,11 @@ function unitsTemperature(element){
         gaugevarmpk.set(parseFloat(result));
       } else if (variable == "monthly_active_energy") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['KWh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "total_delivered_energy") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['KWh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "historic_pf") {
         timestamp = data.timestamp;
