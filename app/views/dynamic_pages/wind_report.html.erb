@@ -2,7 +2,7 @@
 
 <% content_for :active_energy do %>
   <ul class="quick-list">
-    <li><i class="fa fa-flash"></i>Energy [Wh]:</br><span id="gauge-actual-watt-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy [kWh]:</br><span id="gauge-actual-watt-mpk"></span></li>
   </ul>
   <!-- <h2 style="text-align: center;"><b> Active Energy</b><br> -->
   <div style="text-align: center;">
@@ -12,7 +12,7 @@
          <span id="gauge-text-watt-mpk" class="gauge-value pull-left"></span>
          <span id="goal-text-watt-mpk" class="goal-value pull-right" style="float: left;"></span>
          </br>
-         <span style="font-weight: bold;text-align: center;display: block;">Wh</span>
+         <span style="font-weight: bold;text-align: center;display: block;">kWh</span>
       </div>
   </div>
 <% end %>
@@ -279,7 +279,7 @@ $(document).ready(function() {
           data: z_data
           },
           {
-          label: '150 W',
+          label: '100 W',
           backgroundColor: "transparent",
           borderColor: "#404040",
           pointBorderColor: "#404040",
@@ -443,7 +443,7 @@ $(document).ready(function() {
               stacked: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Energy [Wh]'
+                labelString: 'Energy [kWh]'
               }
             }]
           },
@@ -567,15 +567,15 @@ function unitsTemperature(element){
         gaugevarmpk.set(parseFloat(result));
       } else if (variable == "monthly_active_energy") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "total_delivered_energy") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['Wh'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "historic_pf") {
         timestamp = data.timestamp;
-        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['W/VA'];
+        document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['%'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = result;
