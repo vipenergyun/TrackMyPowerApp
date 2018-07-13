@@ -469,10 +469,10 @@ function ShowEnergies() {
     result = data.result;
     timestamp = data.timestamp;
     if (variable == "energy_watt") {
-      gaugewatt.maxValue = parseFloat(2000);
+      gaugewatt.maxValue = parseFloat(4000);
       gaugewatt.set(parseFloat(result));
     } else if (variable == "energy_va") {
-      gaugeva.maxValue = parseFloat(2000);
+      gaugeva.maxValue = parseFloat(6000);
       gaugeva.set(parseFloat(result));
     } else if (variable == "energy_var") {
       gaugevar.maxValue = parseFloat(2000);
