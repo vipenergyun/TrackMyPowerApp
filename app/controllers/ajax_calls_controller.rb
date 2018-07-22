@@ -19,7 +19,10 @@ class AjaxCallsController < ApplicationController
     case variable
     when "energy_watt"
       variable = "energy_watt"
-      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      max_current_month_watt = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt").to_f
+      min_current_month_watt = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt").to_f
+      @result = max_current_month_watt - min_current_month_watt
     when "energy_va"
       variable = "energy_va"
       @result = SharkPanelsEnergyMeasurement.last["energy_va"]
