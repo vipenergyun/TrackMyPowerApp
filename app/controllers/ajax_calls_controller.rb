@@ -92,7 +92,8 @@ class AjaxCallsController < ApplicationController
       variable = "last_update"
     end
     if variable.downcase == "total_delivered_energy"
-      @result = SharkMapukaEnergiesMeasurement.maximum("energy_watt_mpk")
+      real_value = SharkMapukaEnergiesMeasurement.maximum("energy_watt_mpk")
+      @result = (real_value)/100
       timestamp = "Since April 2018"
     end
     if variable.downcase == "monthly_active_energy"
