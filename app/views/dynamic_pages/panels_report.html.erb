@@ -479,7 +479,7 @@ function ShowEnergies() {
       gaugevar.set(parseFloat(result));
     } else if (variable == "total_delivered_energy") {
       timestamp = data.timestamp;
-      document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['kWh'];
+      document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['MWh'];
       document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
     } else if (variable == "monthly_active_energy") {
       timestamp = data.timestamp;
