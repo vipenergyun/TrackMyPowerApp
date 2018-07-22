@@ -70,20 +70,20 @@ class AjaxCallsController < ApplicationController
     when "energy_watt_mpk"
       variable = "energy_watt_mpk"
       query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0"
-      max_current_month_watt_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt_mpk").to_f
-      min_current_month_watt_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt_mpk").to_f
+      max_current_month_watt_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt_mpk").to_f
+      min_current_month_watt_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt_mpk").to_f
       @result = max_current_month_watt_mpk - min_current_month_watt_mpk
     when "energy_va_mpk"
       variable = "energy_va_mpk"
       query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_va_mpk != 0"
-      max_current_month_va_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_va_mpk").to_f
-      min_current_month_va_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_va_mpk").to_f
+      max_current_month_va_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_va_mpk").to_f
+      min_current_month_va_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_va_mpk").to_f
       @result = max_current_month_va_mpk - min_current_month_va_mpk
     when "energy_var_mpk"
       variable = "energy_var_mpk"
       query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_var_mpk != 0"
-      max_current_month_var_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var_mpk").to_f
-      min_current_month_var_mpk = SharkMapukaEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var_mpk").to_f
+      max_current_month_var_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var_mpk").to_f
+      min_current_month_var_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var_mpk").to_f
       @result = max_current_month_var_mpk - min_current_month_var_mpk
     when "created_at"
       @result = SharkMapukaEnergiesMeasurement.last[variable] if !SharkMapukaEnergiesMeasurement.last.nil?
