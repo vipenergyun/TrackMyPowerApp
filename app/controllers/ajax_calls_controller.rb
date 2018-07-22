@@ -31,7 +31,7 @@ class AjaxCallsController < ApplicationController
       @result = max_current_month_va - min_current_month_va
     when "energy_var"
       variable = "energy_var"
-      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_var != 0"
       max_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var").to_f
       min_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var").to_f
       @result = max_current_month_var - min_current_month_var
