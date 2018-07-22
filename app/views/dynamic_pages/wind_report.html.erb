@@ -557,13 +557,13 @@ function unitsTemperature(element){
       result = data.result;
       timestamp = data.timestamp;
       if (variable == "energy_watt_mpk") {
-        gaugewattmpk.maxValue = parseFloat(500);
+        gaugewattmpk.maxValue = parseFloat(300);
         gaugewattmpk.set(parseFloat(result));
       } else if (variable == "energy_va_mpk") {
-        gaugevampk.maxValue = parseFloat(500);
+        gaugevampk.maxValue = parseFloat(300);
         gaugevampk.set(parseFloat(result));
       } else if (variable == "energy_var_mpk") {
-        gaugevarmpk.maxValue = parseFloat(500);
+        gaugevarmpk.maxValue = parseFloat(300);
         gaugevarmpk.set(parseFloat(result));
       } else if (variable == "monthly_active_energy") {
         timestamp = data.timestamp;
