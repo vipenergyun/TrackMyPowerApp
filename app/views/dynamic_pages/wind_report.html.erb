@@ -579,8 +579,8 @@ function unitsTemperature(element){
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
         document.getElementById("subtitle_active_energy").innerHTML = "Last month";
-        document.getElementById("subtitle_reactive_energy").innerHTML = result;
-        document.getElementById("subtitle_apparent_energy").innerHTML = result;
+        document.getElementById("subtitle_reactive_energy").innerHTML = "Last month";
+        document.getElementById("subtitle_apparent_energy").innerHTML = "Last month";
       } else {
         document.getElementById(variable).innerHTML = result;
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
