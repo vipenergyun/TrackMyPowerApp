@@ -25,10 +25,16 @@ class AjaxCallsController < ApplicationController
       @result = max_current_month_watt - min_current_month_watt
     when "energy_va"
       variable = "energy_va"
-      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_va != 0"
+      max_current_month_va = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_va").to_f
+      min_current_month_va = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_va").to_f
+      @result = max_current_month_va - min_current_month_va
     when "energy_var"
       variable = "energy_var"
-      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      max_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var").to_f
+      min_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var").to_f
+      @result = max_current_month_var - min_current_month_var
     when "created_at"
       @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
       timestamp = @result.strftime("%F")
