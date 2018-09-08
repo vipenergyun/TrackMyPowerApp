@@ -19,13 +19,22 @@ class AjaxCallsController < ApplicationController
     case variable
     when "energy_watt"
       variable = "energy_watt"
-      @result = SharkPanelsEnergyMeasurement.last["energy_watt"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt != 0"
+      max_current_month_watt = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt").to_f
+      min_current_month_watt = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt").to_f
+      @result = max_current_month_watt - min_current_month_watt
     when "energy_va"
       variable = "energy_va"
-      @result = SharkPanelsEnergyMeasurement.last["energy_va"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_va != 0"
+      max_current_month_va = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_va").to_f
+      min_current_month_va = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_va").to_f
+      @result = max_current_month_va - min_current_month_va
     when "energy_var"
       variable = "energy_var"
-      @result = SharkPanelsEnergyMeasurement.last["energy_var"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_var != 0"
+      max_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var").to_f
+      min_current_month_var = SharkPanelsEnergyMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var").to_f
+      @result = max_current_month_var - min_current_month_var
     when "created_at"
       @result = SharkPanelsEnergyMeasurement.last[variable] if !SharkPanelsEnergyMeasurement.last.nil?
       timestamp = @result.strftime("%F")
@@ -33,7 +42,8 @@ class AjaxCallsController < ApplicationController
       variable = "last_update"
     end
     if variable.downcase == "total_delivered_energy"
-      @result = SharkPanelsEnergyMeasurement.maximum("energy_watt")
+      real_value = SharkPanelsEnergyMeasurement.maximum("energy_watt")
+      @result = (real_value)/100
       timestamp = "Since April 2018"
     end
     if variable.downcase == "monthly_active_energy"
@@ -60,13 +70,22 @@ class AjaxCallsController < ApplicationController
     case variable
     when "energy_watt_mpk"
       variable = "energy_watt_mpk"
-      @result = SharkMapukaEnergiesMeasurement.last["energy_watt_mpk"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_watt_mpk != 0"
+      max_current_month_watt_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_watt_mpk").to_f
+      min_current_month_watt_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_watt_mpk").to_f
+      @result = max_current_month_watt_mpk - min_current_month_watt_mpk
     when "energy_va_mpk"
       variable = "energy_va_mpk"
-      @result = SharkMapukaEnergiesMeasurement.last["energy_va_mpk"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_va_mpk != 0"
+      max_current_month_va_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_va_mpk").to_f
+      min_current_month_va_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_va_mpk").to_f
+      @result = max_current_month_va_mpk - min_current_month_va_mpk
     when "energy_var_mpk"
       variable = "energy_var_mpk"
-      @result = SharkMapukaEnergiesMeasurement.last["energy_var_mpk"]
+      query = "extract(month from created_at) = ? and extract(year from created_at) = ? and energy_var_mpk != 0"
+      max_current_month_var_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).maximum("energy_var_mpk").to_f
+      min_current_month_var_mpk = SharkMapukaEnergiesMeasurement.where(query, Time.now.month, Time.now.year ).minimum("energy_var_mpk").to_f
+      @result = max_current_month_var_mpk - min_current_month_var_mpk
     when "created_at"
       @result = SharkMapukaEnergiesMeasurement.last[variable] if !SharkMapukaEnergiesMeasurement.last.nil?
       timestamp = @result.strftime("%F")

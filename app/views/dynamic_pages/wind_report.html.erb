@@ -19,7 +19,7 @@
 
 <% content_for :apparent_energy do %>
   <ul class="quick-list">
-    <li><i class="fa fa-flash"></i>Energy [VAh]:</br><span id="gauge-actual-va-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy [kVAh]:</br><span id="gauge-actual-va-mpk"></span></li>
   </ul>
     <!-- <h2 style="text-align: center;"><b>Apparent Energy</b><br> -->
     <div style="text-align: center;">
@@ -29,7 +29,7 @@
         <span id="gauge-text-va-mpk" class="gauge-value pull-left"></span>
         <span id="goal-text-va-mpk" class="goal-value pull-right" style="float: left;"></span>
         </br>
-        <span style="font-weight: bold;text-align: center;display: block;">VAh</span>
+        <span style="font-weight: bold;text-align: center;display: block;">kVAh</span>
       </div>
     </div>
 <% end %>
@@ -37,7 +37,7 @@
 <% content_for :reactive_energy do %>
   <ul class="quick-list">
     
-    <li><i class="fa fa-flash"></i>Energy[VARh]:</br><span id="gauge-actual-var-mpk"></span></li>
+    <li><i class="fa fa-flash"></i>Energy[kVARh]:</br><span id="gauge-actual-var-mpk"></span></li>
   </ul>
     <!-- <h2 style="text-align: center;"><b>Reactive Energy</b><br> -->
     <div style="text-align: center;">
@@ -47,7 +47,7 @@
         <span id="gauge-text-var-mpk" class="gauge-value pull-left"></span>
         <span id="goal-text-var-mpk" class="goal-value pull-right" style="float: left;"></span>
         </br>
-        <span style="font-weight: bold;text-align: center;display: block;">VARh</span>
+        <span style="font-weight: bold;text-align: center;display: block;">kVARh</span>
       </div>
     </div>
 <% end %>
@@ -557,13 +557,13 @@ function unitsTemperature(element){
       result = data.result;
       timestamp = data.timestamp;
       if (variable == "energy_watt_mpk") {
-        gaugewattmpk.maxValue = parseFloat(2000);
+        gaugewattmpk.maxValue = parseFloat(300);
         gaugewattmpk.set(parseFloat(result));
       } else if (variable == "energy_va_mpk") {
-        gaugevampk.maxValue = parseFloat(2000);
+        gaugevampk.maxValue = parseFloat(300);
         gaugevampk.set(parseFloat(result));
       } else if (variable == "energy_var_mpk") {
-        gaugevarmpk.maxValue = parseFloat(2000);
+        gaugevarmpk.maxValue = parseFloat(300);
         gaugevarmpk.set(parseFloat(result));
       } else if (variable == "monthly_active_energy") {
         timestamp = data.timestamp;
@@ -578,9 +578,9 @@ function unitsTemperature(element){
         document.getElementById(variable).innerHTML = parseFloat(result).toFixed(1) + ['%'];
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
       } else if (variable == "timestamp" ){
-        document.getElementById("subtitle_active_energy").innerHTML = result;
-        document.getElementById("subtitle_reactive_energy").innerHTML = result;
-        document.getElementById("subtitle_apparent_energy").innerHTML = result;
+        document.getElementById("subtitle_active_energy").innerHTML = "Last month";
+        document.getElementById("subtitle_reactive_energy").innerHTML = "Last month";
+        document.getElementById("subtitle_apparent_energy").innerHTML = "Last month";
       } else {
         document.getElementById(variable).innerHTML = result;
         document.getElementById(variable.concat("_timestamp")).innerHTML = timestamp;
