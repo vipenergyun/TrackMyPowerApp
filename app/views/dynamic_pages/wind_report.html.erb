@@ -17,11 +17,15 @@
   </div>
 <% end %>
 
-<% content_for :apparent_energy do %>
-  <ul class="quick-list">
+<% content_for :wind_turbine_location do %>
+  <div style="text-align: center;">
+    <img src="/wind_turbine.jpeg" style="max-width: 78%;height: auto;padding-top: 5px;padding-right: 10px;padding-bottom: 5px;padding-left: 10px;">
+    <h2 style="text-align: center;"><b>Block K UN</b><br>
+  </div>
+  <!-- <ul class="quick-list">
     <li><i class="fa fa-flash"></i>Energy [kVAh]:</br><span id="gauge-actual-va-mpk"></span></li>
   </ul>
-    <!-- <h2 style="text-align: center;"><b>Apparent Energy</b><br> -->
+    <h2 style="text-align: center;"><b>Apparent Energy</b><br> 
     <div style="text-align: center;">
       <canvas width="190" height="120" align="center" id="gaugevampk"></canvas>
       <div class="goal-wrapper">
@@ -31,7 +35,7 @@
         </br>
         <span style="font-weight: bold;text-align: center;display: block;">kVAh</span>
       </div>
-    </div>
+    </div>-->
 <% end %>
 
 <% content_for :reactive_energy do %>
@@ -648,11 +652,11 @@ function unitsTemperature(element){
     gaugewattmpk.animationSpeed = 32;
     gaugewattmpk.setTextField(document.getElementById("gauge-actual-watt-mpk"));
 
-    var targetva = document.getElementById('gaugevampk');
+    /*var targetva = document.getElementById('gaugevampk');
     gaugevampk = new Gauge(targetva).setOptions(optva);
     document.getElementById("gaugevampk").removeAttribute("style");
     gaugevampk.animationSpeed = 32;
-    gaugevampk.setTextField(document.getElementById("gauge-actual-va-mpk"));
+    gaugevampk.setTextField(document.getElementById("gauge-actual-va-mpk"));*/
 
     var targetvar = document.getElementById('gaugevarmpk');
     gaugevarmpk = new Gauge(targetvar).setOptions(optvar);

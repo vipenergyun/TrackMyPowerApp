@@ -17,11 +17,15 @@
   </div>
 <% end %>
 
-<% content_for :apparent_energy do %>
-  <ul class="quick-list">
+<% content_for :solar_panels_location do %>
+  <div style="text-align: center;">
+    <img src="/solar_panels.jpeg" style="max-width: 78%;height: auto;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;">
+    <h2 style="text-align: center;"><b>Block K UN</b><br>
+  </div>
+  <!--<ul class="quick-list">
     <li><i class="fa fa-flash"></i>Energy [kVAh]:</br><span id="gauge-actual-va"></span></li>
   </ul>
-    <!-- <h2 style="text-align: center;"><b>Apparent Energy</b><br> -->
+     <h2 style="text-align: center;"><b>Apparent Energy</b><br> 
     <div style="text-align: center;">
       <canvas width="190" height="120" align="center" id="gaugeva"></canvas>
       <div class="goal-wrapper">
@@ -31,7 +35,7 @@
         </br>
         <span style="font-weight: bold;text-align: center;display: block;">kVAh</span>
       </div>
-    </div>
+    </div>-->
 <% end %>
 
 <% content_for :reactive_energy do %>
@@ -555,11 +559,11 @@ $(document).ready(function() {
     gaugewatt.animationSpeed = 32;
     gaugewatt.setTextField(document.getElementById("gauge-actual-watt"));
 
-    var targetva = document.getElementById('gaugeva');
+    /*var targetva = document.getElementById('gaugeva');
     gaugeva = new Gauge(targetva).setOptions(optva);
     document.getElementById("gaugeva").removeAttribute("style");
     gaugeva.animationSpeed = 32;
-    gaugeva.setTextField(document.getElementById("gauge-actual-va"));
+    gaugeva.setTextField(document.getElementById("gauge-actual-va"));*/
 
     var targetvar = document.getElementById('gaugevar');
     gaugevar = new Gauge(targetvar).setOptions(optvar);
